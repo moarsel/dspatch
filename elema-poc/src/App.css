@@ -93,6 +93,12 @@ body {
 .sidebar-node.delay { background: #a55eea; color: #fff; }
 .sidebar-node.output { background: #26de81; color: #1a1a2e; }
 .sidebar-node.bang { background: #e84393; color: #fff; }
+.sidebar-node.noise { background: #95a5a6; color: #1a1a2e; }
+.sidebar-node.lfo { background: #fd79a8; color: #1a1a2e; }
+.sidebar-node.mix { background: #00cec9; color: #1a1a2e; }
+.sidebar-node.notetofreq { background: #74b9ff; color: #1a1a2e; }
+.sidebar-node.number { background: #636e72; color: #fff; }
+.sidebar-node.math { background: #b2bec3; color: #1a1a2e; }
 
 /* Canvas */
 .canvas {
@@ -144,6 +150,12 @@ body {
 .delay .node-header { background: #a55eea; color: #fff; }
 .output .node-header { background: #26de81; color: #1a1a2e; }
 .bang .node-header { background: #e84393; color: #fff; }
+.noise .node-header { background: #95a5a6; color: #1a1a2e; }
+.lfo .node-header { background: #fd79a8; color: #1a1a2e; }
+.mix .node-header { background: #00cec9; color: #1a1a2e; }
+.notetofreq .node-header { background: #74b9ff; color: #1a1a2e; }
+.number .node-header { background: #636e72; color: #fff; }
+.math .node-header { background: #b2bec3; color: #1a1a2e; }
 
 .node-content {
   padding: 8px;

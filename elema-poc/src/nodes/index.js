@@ -6,6 +6,12 @@ import { EnvelopeNode, descriptor as envelopeDescriptor } from './Envelope';
 import { DelayNode, descriptor as delayDescriptor } from './Delay';
 import { OutputNode, descriptor as outputDescriptor } from './Output';
 import { BangNode, descriptor as bangDescriptor } from './Bang';
+import { NoiseNode, descriptor as noiseDescriptor } from './Noise';
+import { LFONode, descriptor as lfoDescriptor } from './LFO';
+import { MixNode, descriptor as mixDescriptor } from './Mix';
+import { NoteToFreqNode, descriptor as noteToFreqDescriptor } from './NoteToFreq';
+import { NumberNode, descriptor as numberDescriptor } from './Number';
+import { MathNode, descriptor as mathDescriptor } from './Math';
 
 // Registry: type -> { descriptor, Component }
 export const registry = {
@@ -36,6 +42,30 @@ export const registry = {
   bang: {
     descriptor: bangDescriptor,
     Component: BangNode,
+  },
+  noise: {
+    descriptor: noiseDescriptor,
+    Component: NoiseNode,
+  },
+  lfo: {
+    descriptor: lfoDescriptor,
+    Component: LFONode,
+  },
+  mix: {
+    descriptor: mixDescriptor,
+    Component: MixNode,
+  },
+  notetofreq: {
+    descriptor: noteToFreqDescriptor,
+    Component: NoteToFreqNode,
+  },
+  number: {
+    descriptor: numberDescriptor,
+    Component: NumberNode,
+  },
+  math: {
+    descriptor: mathDescriptor,
+    Component: MathNode,
   },
 };
 
