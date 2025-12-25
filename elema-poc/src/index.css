@@ -1,0 +1,78 @@
+/* App.css - Basic styling */
+.app {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 200px;
+  background: #1e1e1e;
+  color: white;
+  padding: 20px;
+}
+
+.node-type {
+  background: #333;
+  padding: 10px;
+  margin: 10px 0;
+  cursor: grab;
+  border-radius: 4px;
+}
+
+.dsp-node {
+  background: white;
+  border: 1px solid #777;
+  border-radius: 8px;
+  padding: 10px;
+  min-width: 150px;
+  font-size: 12px;
+}
+
+.dsp-node.selected {
+  border-color: #0084ff;
+  box-shadow: 0 0 0 2px rgba(0,132,255,0.2);
+}
+
+.node-header {
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.inlet-row {
+  position: relative;
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+}
+
+.inlet-label {
+  margin-left: 5px;
+  font-size: 10px;
+  color: #666;
+}
+
+/* Hot inlets have red handles, cold have blue */
+.inlet.hot {
+  background: #ff6b6b !important;
+  width: 10px;
+  height: 10px;
+}
+
+.inlet.cold {
+  background: #4dabf7 !important;
+  width: 10px;
+  height: 10px;
+}
+
+.outlet {
+  background: #51cf66 !important;
+  width: 10px;
+  height: 10px;
+}
+
+.inlet-control {
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  padding: 2px 4px;
+}
