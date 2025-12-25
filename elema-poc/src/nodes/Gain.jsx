@@ -12,12 +12,16 @@ export const descriptor = {
   outlets: ['signal'],
   compile: (inputs, nodeId) => {
     const input = inputs.input;
-    const gain = inputs.gain;
 
     // If no input signal, return silence
     if (typeof input === 'number' && input === 0) {
       return { signal: el.const({ key: `${nodeId}:silence`, value: 0 }) };
     }
+
+    // Wrap numeric gain in const
+    const gain = typeof inputs.gain === 'number'
+      ? el.const({ key: `${nodeId}:gain`, value: inputs.gain })
+      : inputs.gain;
 
     return {
       signal: el.mul(input, gain)
@@ -31,7 +35,7 @@ export function GainNode({ id, selected }) {
   return (
     <div className={`audio-node gain ${selected ? 'selected' : ''}`}>
       <div className="node-header">Gain</div>
-      <div className="node-content">
+      <div className="node-content nodrag">
         <div className="param-row">
           <Handle
             type="target"

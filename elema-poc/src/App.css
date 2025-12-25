@@ -74,7 +74,6 @@ body {
 .sidebar-node {
   padding: 12px 16px;
   border-radius: 8px;
-  cursor: grab;
   font-weight: 500;
   text-transform: capitalize;
   transition: transform 0.1s, box-shadow 0.1s;
@@ -86,9 +85,6 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.sidebar-node:active {
-  cursor: grabbing;
-}
 
 .sidebar-node.oscillator { background: #ff6b6b; color: #fff; }
 .sidebar-node.gain { background: #4ecdc4; color: #1a1a2e; }
@@ -109,6 +105,7 @@ body {
   border: none !important;
   box-shadow: none !important;
   background: none !important;
+  cursor: auto;
 }
 
 /* Audio Nodes */
@@ -132,6 +129,12 @@ body {
   letter-spacing: 1px;
   font-size: 11px;
   border-radius: 6px 6px 0 0;
+  cursor: grab;
+  user-select: none;
+}
+
+.node-header:active{
+  cursor: grabbing;
 }
 
 .oscillator .node-header { background: #ff6b6b; color: #fff; }
@@ -257,14 +260,14 @@ body {
 
 /* Handles */
 .handle {
-  width: 12px !important;
-  height: 12px !important;
+  width: 16px !important;
+  height: 16px !important;
   border: 2px solid #333 !important;
   background: #667eea !important;
 }
 
 .handle.inlet {
-  left: -6px !important;
+  left: -17px !important;
 }
 
 .handle.inlet.audio {
@@ -272,7 +275,7 @@ body {
 }
 
 .handle.outlet {
-  right: -6px !important;
+  right: -7px !important;
   background: #ff6b6b !important;
 }
 

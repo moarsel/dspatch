@@ -37,7 +37,7 @@ export function EnvelopeNode({ id, selected }) {
   return (
     <div className={`audio-node envelope ${selected ? 'selected' : ''}`}>
       <div className="node-header">Envelope</div>
-      <div className="node-content">
+      <div className="node-content nodrag">
         <div className="param-row">
           <Handle
             type="target"
@@ -48,8 +48,8 @@ export function EnvelopeNode({ id, selected }) {
           <label>gate</label>
           <button
             className={`gate-button ${data.gate ? 'active' : ''}`}
-            onMouseDown={() => updateParam('gate', 1)}
-            onMouseUp={() => updateParam('gate', 0)}
+            onMouseDown={(e) => { e.stopPropagation(); updateParam('gate', 1); }}
+            onMouseUp={(e) => { e.stopPropagation(); updateParam('gate', 0); }}
             onMouseLeave={() => updateParam('gate', 0)}
           >
             {data.gate ? 'ON' : 'OFF'}

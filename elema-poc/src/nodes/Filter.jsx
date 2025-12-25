@@ -13,8 +13,6 @@ export const descriptor = {
   outlets: ['signal'],
   compile: (inputs, nodeId) => {
     const input = inputs.input;
-    const cutoff = inputs.cutoff;
-    const q = inputs.q;
     const filterType = inputs.filterType ?? 'lowpass';
 
     // If no input signal, return silence
@@ -22,22 +20,16 @@ export const descriptor = {
       return { signal: el.const({ key: `${nodeId}:silence`, value: 0 }) };
     }
 
-    // el.svf returns { lp, hp, bp }
-    // We need to select the appropriate output
-    const svf = el.svf(cutoff, q, input);
+    // Ensure cutoff and q are signals (wrap numbers in const)
+    const cutoff = typeof inputs.cutoff === 'number'
+      ? el.const({ key: `${nodeId}:cutoff`, value: inputs.cutoff })
+      : inputs.cutoff;
+    const q = typeof inputs.q === 'number'
+      ? el.const({ key: `${nodeId}:q`, value: inputs.q })
+      : inputs.q;
 
-    let signal;
-    switch (filterType) {
-      case 'highpass':
-        signal = el.svfhp(cutoff, q, input);
-        break;
-      case 'bandpass':
-        signal = el.svfbp(cutoff, q, input);
-        break;
-      case 'lowpass':
-      default:
-        signal = el.svflp(cutoff, q, input);
-    }
+    // el.svf takes props with mode property
+    const signal = el.svf({ mode: filterType }, cutoff, q, input);
 
     return { signal };
   }
@@ -49,7 +41,7 @@ export function FilterNode({ id, selected }) {
   return (
     <div className={`audio-node filter ${selected ? 'selected' : ''}`}>
       <div className="node-header">Filter</div>
-      <div className="node-content">
+      <div className="node-content nodrag">
         <div className="param-row">
           <Handle
             type="target"

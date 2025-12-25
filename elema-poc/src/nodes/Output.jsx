@@ -39,7 +39,7 @@ export function OutputNode({ id, selected }) {
   return (
     <div className={`audio-node output ${selected ? 'selected' : ''}`}>
       <div className="node-header">Output</div>
-      <div className="node-content">
+      <div className="node-content nodrag">
         <div className="param-row">
           <Handle
             type="target"

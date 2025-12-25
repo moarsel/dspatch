@@ -44,7 +44,7 @@ export function OscillatorNode({ id, selected }) {
   return (
     <div className={`audio-node oscillator ${selected ? 'selected' : ''}`}>
       <div className="node-header">Oscillator</div>
-      <div className="node-content">
+      <div className="node-content nodrag">
         <div className="param-row">
           <Handle
             type="target"
