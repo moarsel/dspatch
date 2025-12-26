@@ -1,13 +1,14 @@
 // App.jsx - Main application with React Flow canvas and sidebar
 import { useCallback, useState } from 'react';
-import ReactFlow, { Background, Controls, MiniMap } from 'reactflow';
+import ReactFlow, { Background, Controls } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './App.css';
 
 import { useGraph } from './engine/useGraph';
 import { initAudio } from './engine/audioContext';
 import { nodeTypes, availableNodes } from './nodes';
-import { Sidebar, SidebarHeader, NodePalette } from './components';
+import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
+import { AppSidebar, SidebarToggle } from '@/components/AppSidebar';
 
 function App() {
   const [audioStarted, setAudioStarted] = useState(false);
@@ -59,47 +60,47 @@ function App() {
   }, []);
 
   return (
-    <div className="app">
-      {/* Start Audio Overlay */}
-      {!audioStarted && (
-        <div className="audio-overlay" onClick={handleStartAudio}>
-          <div className="audio-overlay-content">
-            <h2>Welcome</h2>
-            <p>Drag nodes onto the canvas to start. To hear audio, connect to an Output. </p>
+    <SidebarProvider style={{ '--sidebar-width': '14rem' }}>
+      <div className="app dark">
+        {/* Start Audio Overlay */}
+        {!audioStarted && (
+          <div className="audio-overlay" onClick={handleStartAudio}>
+            <div className="audio-overlay-content">
+              <h2>Welcome</h2>
+              <p>Drag nodes onto the canvas to start. To hear audio, connect to an Output.</p>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Sidebar */}
-      <Sidebar>
-        <SidebarHeader>Nodes</SidebarHeader>
-        <NodePalette nodes={availableNodes} />
-      </Sidebar>
+        {/* Floating Sidebar */}
+        <AppSidebar availableNodes={availableNodes} />
+        <SidebarToggle />
 
-      {/* React Flow Canvas */}
-      <div className="canvas">
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          onDrop={onDrop}
-          onDragOver={onDragOver}
-          nodeTypes={nodeTypes}
-          fitView
-          snapToGrid
-          snapGrid={[15, 15]}
-          defaultEdgeOptions={{
-            type: 'smoothstep',
-            animated: true,
-          }}
-        >
-          <Background variant="dots" gap={15} size={1} />
-          <Controls />
-        </ReactFlow>
+        {/* React Flow Canvas */}
+        <SidebarInset className="canvas">
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            onDrop={onDrop}
+            onDragOver={onDragOver}
+            nodeTypes={nodeTypes}
+            fitView
+            snapToGrid
+            snapGrid={[15, 15]}
+            defaultEdgeOptions={{
+              type: 'smoothstep',
+              animated: true,
+            }}
+          >
+            <Background variant="dots" gap={15} size={1} />
+            <Controls position='bottom-right' />
+          </ReactFlow>
+        </SidebarInset>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }
 
