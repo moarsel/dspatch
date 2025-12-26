@@ -45,7 +45,7 @@ export function LFONode({ id, selected }) {
   const { data, updateParam } = useNodeData(id);
 
   return (
-    <NodeCard type="lfo" selected={selected} headerClassName="bg-pink-400 text-gray-900">
+    <NodeCard type="lfo" selected={selected} headerClassName="bg-pink-400 ">
       <NodeContent>
         <ParamRow>
           <Handle

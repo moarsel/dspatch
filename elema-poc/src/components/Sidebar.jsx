@@ -1,9 +1,10 @@
 /**
  * Sidebar component for node palette
+ * Clean, organized by category
  */
 export function Sidebar({ children }) {
   return (
-    <aside className="w-44 bg-gray-950 border-r border-blue-900 p-5 overflow-y-auto flex flex-col">
+    <aside className="w-40 bg-surface border-r border-surface-overlay p-3 overflow-y-auto flex flex-col">
       {children}
     </aside>
   );
@@ -14,59 +15,75 @@ export function Sidebar({ children }) {
  */
 export function SidebarHeader({ children }) {
   return (
-    <h2 className="text-xs uppercase tracking-widest text-gray-600 mb-5 font-semibold">
+    <h2 className="text-xxs uppercase tracking-widest mb-3 font-semibold">
       {children}
     </h2>
   );
 }
 
 /**
- * Node type palette - list of draggable node buttons
+ * Node type palette - organized by category
  */
 export function NodePalette({ nodes }) {
-  const colorMap = {
-    oscillator: 'bg-red-500 text-white hover:bg-red-600',
-    gain: 'bg-cyan-400 text-gray-900 hover:bg-cyan-300',
-    filter: 'bg-blue-500 text-white hover:bg-blue-600',
-    envelope: 'bg-yellow-400 text-gray-900 hover:bg-yellow-300',
-    delay: 'bg-purple-600 text-white hover:bg-purple-700',
-    output: 'bg-green-500 text-gray-900 hover:bg-green-600',
-    bang: 'bg-pink-500 text-white hover:bg-pink-600',
-    noise: 'bg-gray-500 text-gray-900 hover:bg-gray-600',
-    lfo: 'bg-pink-400 text-gray-900 hover:bg-pink-300',
-    mix: 'bg-teal-500 text-gray-900 hover:bg-teal-600',
-    notetofreq: 'bg-blue-400 text-gray-900 hover:bg-blue-300',
-    number: 'bg-gray-600 text-white hover:bg-gray-700',
-    math: 'bg-gray-400 text-gray-900 hover:bg-gray-300',
-    compare: 'bg-yellow-500 text-gray-900 hover:bg-yellow-600',
-    scope: 'bg-green-600 text-white hover:bg-green-700',
-    meter: 'bg-orange-600 text-white hover:bg-orange-700',
-    fft: 'bg-indigo-600 text-white hover:bg-indigo-700',
-    probe: 'bg-cyan-300 text-gray-900 hover:bg-cyan-200',
-    metro: 'bg-orange-300 text-gray-900 hover:bg-orange-200',
-    sequencer: 'bg-indigo-400 text-gray-900 hover:bg-indigo-300',
+  // Categorize nodes for organized display
+  const categories = {
+    'I/O': ['output'],
+    'Sources': ['oscillator', 'noise'],
+    'Processing': ['gain', 'filter', 'delay', 'mix'],
+    'Modulation': ['lfo', 'envelope'],
+    'Timing': ['metro', 'sequencer', 'bang'],
+    'Utility': ['number', 'math', 'compare', 'notetofreq'],
+    'Analysis': ['scope', 'meter', 'fft', 'probe'],
+  };
+
+  // Accent colors by category - subtle left border
+  const categoryAccents = {
+    'Sources': 'border-l-orange-500',
+    'Processing': 'border-l-emerald-500',
+    'Modulation': 'border-l-blue-500',
+    'Timing': 'border-l-pink-500',
+    'Utility': 'border-l-slate-400',
+    'Analysis': 'border-l-violet-500',
+    'I/O': 'border-l-rose-500',
   };
 
   return (
-    <div className="flex flex-col gap-2">
-      {nodes.map((nodeType) => (
-        <button
-          key={nodeType}
-          draggable
-          className={`
-            px-4 py-3 rounded font-semibold text-center capitalize
-            transition-all duration-100 text-sm
-            ${colorMap[nodeType] || 'bg-gray-700 text-white hover:bg-gray-600'}
-            hover:-translate-y-0.5 hover:shadow-lg cursor-grab active:cursor-grabbing
-          `}
-          onDragStart={(e) => {
-            e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('application/reactflow', nodeType);
-          }}
-        >
-          {nodeType}
-        </button>
-      ))}
+    <div className="flex flex-col">
+      {Object.entries(categories).map(([category, categoryNodes]) => {
+        // Filter to only include nodes that exist in the available nodes
+        const availableInCategory = categoryNodes.filter(n => nodes.includes(n));
+        if (availableInCategory.length === 0) return null;
+
+        return (
+          <div key={category} className="pb-5">
+            <div className={`text-sm uppercase text-muted font-medium mt-3 mb-2  pl-2 border-l-2 ${categoryAccents[category]}`}>
+              {category}
+            </div>
+            <div className="flex flex-col gap-0.5">
+              {availableInCategory.map((nodeType) => (
+                <button
+                  key={nodeType}
+                  draggable
+                  className={`
+                    px-2 py-1.5 rounded text-left text-xs font-medium
+                    bg-neutral-800
+                    transition-all duration-200
+                    hover:bg-gray-700 
+                    active:bg-gray-600
+                    cursor-grab active:cursor-grabbing
+                  `}
+                  onDragStart={(e) => {
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('application/reactflow', nodeType);
+                  }}
+                >
+                  {nodeType}
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

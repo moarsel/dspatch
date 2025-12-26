@@ -32,7 +32,7 @@ export function MetroNode({ id, selected }) {
   const isActive = useSignalHigh(id);
 
   return (
-    <NodeCard type="metro" selected={selected} headerClassName="bg-orange-300 text-gray-900">
+    <NodeCard type="metro" selected={selected} headerClassName="bg-orange-300 ">
       <NodeContent>
         <ParamRow>
           <Handle
@@ -56,7 +56,7 @@ export function MetroNode({ id, selected }) {
           />
         </ParamRow>
 
-        <div className="text-right text-xs font-mono text-gray-600 mt-0.5">
+        <div className="text-right text-xs font-mono text-gray-400 mt-0.5">
           {formatFixed(hz, 2)} Hz
         </div>
       </NodeContent>

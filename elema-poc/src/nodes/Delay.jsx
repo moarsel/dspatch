@@ -63,8 +63,7 @@ export function DelayNode({ id, selected }) {
             type="target"
             position={Position.Left}
             id="input"
-            className="handle inlet audio"
-            style={{ top: '40px' }}
+            className="handle inlet"
           />
           <label className="w-16 text-gray-500 text-xs uppercase font-semibold">input</label>
         </ParamRow>
@@ -75,7 +74,6 @@ export function DelayNode({ id, selected }) {
             position={Position.Left}
             id="time"
             className="handle inlet"
-            style={{ top: '68px' }}
           />
           <RangeInput
             label="time"
@@ -94,7 +92,6 @@ export function DelayNode({ id, selected }) {
             position={Position.Left}
             id="feedback"
             className="handle inlet"
-            style={{ top: '96px' }}
           />
           <RangeInput
             label="fb"
@@ -113,7 +110,6 @@ export function DelayNode({ id, selected }) {
             position={Position.Left}
             id="mix"
             className="handle inlet"
-            style={{ top: '124px' }}
           />
           <RangeInput
             label="mix"

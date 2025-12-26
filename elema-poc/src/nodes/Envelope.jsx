@@ -38,7 +38,7 @@ export function EnvelopeNode({ id, selected }) {
   const gateActive = data.gate || envValue > 0.01;
 
   return (
-    <NodeCard type="envelope" selected={selected} headerClassName="bg-yellow-400 text-gray-900">
+    <NodeCard type="envelope" selected={selected} headerClassName="bg-yellow-400 ">
       <NodeContent>
         <ParamRow>
           <Handle

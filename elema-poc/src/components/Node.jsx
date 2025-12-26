@@ -1,20 +1,40 @@
 /**
  * Base Audio Node Card component
- * Provides header, content area, and styling for audio nodes
- * Pass headerClassName to customize header color/styling
+ * Dieter Rams-inspired: functional, minimal, tactile
  */
-export function NodeCard({ type, selected = false, headerClassName = 'bg-gray-700 text-white', children }) {
+export function NodeCard({ type, selected = false, category = 'default', children }) {
+  // Category determines the subtle accent dot color
+  const accentColors = {
+    source: 'bg-orange-500',      // Oscillator, Noise
+    process: 'bg-emerald-500',    // Gain, Filter, Mix
+    modulation: 'bg-blue-500',    // LFO, Envelope
+    utility: 'bg-slate-400',      // Math, Compare, Number
+    io: 'bg-rose-500',            // Output, Meter
+    trigger: 'bg-pink-500',       // Bang, Metro
+    analysis: 'bg-violet-500',    // Scope, FFT, Probe
+    default: 'bg-slate-500',
+  };
+
   return (
     <div
       className={`
-        bg-gray-900 border-2 rounded-lg min-w-40 text-xs
-        ${selected ? 'border-purple-500 shadow-lg shadow-purple-500/30' : 'border-gray-700'}
+        bg-[#2c2c2e] rounded-md min-w-40 text-xs
+        border border-[#3a3a3c]
+        shadow-lg shadow-black/30
+        transition-all duration-150
+        ${selected ? 'ring-2 ring-orange-500/50 border-orange-500/50' : ''}
       `}
     >
-      <div className={`${headerClassName} px-3 py-2 font-bold text-xs uppercase tracking-wide rounded-t-md cursor-grab active:cursor-grabbing select-none`}>
-        {type}
+      {/* Header with category indicator dot */}
+      <div className="px-3 py-2 border-b border-[#3a3a3c] cursor-grab active:cursor-grabbing select-none flex items-center gap-2">
+        <div className={`w-2 h-2 rounded-full ${accentColors[category]}`} />
+        <span className="text-[10px] font-semibold uppercase tracking-wider text-[#a1a1a6]">
+          {type}
+        </span>
       </div>
-      <div className="p-2">
+
+      {/* Content - extra left padding for handles */}
+      <div className="p-2 pl-4">
         {children}
       </div>
     </div>

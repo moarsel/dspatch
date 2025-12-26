@@ -35,19 +35,17 @@ export const descriptor = {
 };
 
 export function OutputNode({ id, selected }) {
-  const { data, updateParam } = useNodeData(id);
-
   return (
-    <NodeCard type="output" selected={selected} headerClassName="bg-green-500 text-gray-900">
+    <NodeCard type="output" selected={selected} category="io">
       <NodeContent>
         <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="left"
-            className="handle inlet audio"
+            className="handle inlet"
           />
-          <label className="w-12 text-gray-500 text-xs uppercase font-semibold">L</label>
+          <label className="w-8 text-gray-300 text-xxs uppercase font-medium tracking-wide">L</label>
         </ParamRow>
 
         <ParamRow>
@@ -55,9 +53,9 @@ export function OutputNode({ id, selected }) {
             type="target"
             position={Position.Left}
             id="right"
-            className="handle inlet audio"
+            className="handle inlet"
           />
-          <label className="w-12 text-gray-500 text-xs uppercase font-semibold">R</label>
+          <label className="w-8 text-gray-300 text-xxs uppercase font-medium tracking-wide">R</label>
         </ParamRow>
       </NodeContent>
     </NodeCard>

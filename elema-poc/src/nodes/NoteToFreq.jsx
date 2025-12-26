@@ -62,7 +62,7 @@ export function NoteToFreqNode({ id, selected }) {
   const octaves = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
   return (
-    <NodeCard type="notetofreq" selected={selected} headerClassName="bg-blue-400 text-gray-900">
+    <NodeCard type="notetofreq" selected={selected} headerClassName="bg-blue-400 ">
       <NodeContent>
         <ParamRow>
           <Handle

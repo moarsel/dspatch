@@ -42,7 +42,7 @@ export function MathNode({ id, selected }) {
   const operation = data.operation ?? 'add';
 
   return (
-    <NodeCard type="math" selected={selected} headerClassName="bg-gray-400 text-gray-900">
+    <NodeCard type="math" selected={selected} headerClassName="bg-gray-400 ">
       <NodeContent>
         <ParamRow>
           <Handle

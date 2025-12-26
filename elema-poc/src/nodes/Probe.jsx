@@ -22,7 +22,7 @@ export function ProbeNode({ id, selected }) {
   const { display } = useSignalValue(id);
 
   return (
-    <NodeCard type="probe" selected={selected} headerClassName="bg-cyan-300 text-gray-900">
+    <NodeCard type="probe" selected={selected} headerClassName="bg-cyan-300 ">
       <NodeContent>
         <ParamRow>
           <Handle

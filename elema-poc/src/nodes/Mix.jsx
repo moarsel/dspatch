@@ -58,14 +58,14 @@ export function MixNode({ id, selected }) {
       : `B ${Math.round(data.balance * 100)}%`;
 
   return (
-    <NodeCard type="mix" selected={selected} headerClassName="bg-teal-500 text-gray-900">
+    <NodeCard type="mix" selected={selected} headerClassName="bg-teal-500 ">
       <NodeContent>
         <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="a"
-            className="handle inlet audio"
+            className="handle inlet"
           />
           <label className="w-6 text-gray-500 text-xs uppercase font-semibold">A</label>
         </ParamRow>
@@ -75,7 +75,7 @@ export function MixNode({ id, selected }) {
             type="target"
             position={Position.Left}
             id="b"
-            className="handle inlet audio"
+            className="handle inlet"
           />
           <label className="w-6 text-gray-500 text-xs uppercase font-semibold">B</label>
         </ParamRow>

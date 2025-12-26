@@ -91,7 +91,7 @@ export function SequencerNode({ id, selected }) {
   };
 
   return (
-    <NodeCard type="sequencer" selected={selected} headerClassName="bg-indigo-400 text-gray-900">
+    <NodeCard type="sequencer" selected={selected} headerClassName="bg-indigo-400 ">
       <NodeContent>
         <ParamRow>
           <Handle

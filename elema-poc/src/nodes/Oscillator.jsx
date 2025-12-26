@@ -43,7 +43,7 @@ export function OscillatorNode({ id, selected }) {
   const { data, updateParam } = useNodeData(id);
 
   return (
-    <NodeCard type="oscillator" selected={selected} headerClassName="bg-red-500 text-white">
+    <NodeCard type="oscillator" selected={selected} category="source">
       <NodeContent>
         <ParamRow>
           <Handle
@@ -86,10 +86,10 @@ export function OscillatorNode({ id, selected }) {
             value={data.waveform ?? 'sine'}
             onChange={e => updateParam('waveform', e.target.value)}
             options={[
-              { value: 'sine', label: 'Sine' },
-              { value: 'saw', label: 'Saw' },
-              { value: 'square', label: 'Square' },
-              { value: 'triangle', label: 'Triangle' },
+              { value: 'sine', label: 'sine' },
+              { value: 'saw', label: 'saw' },
+              { value: 'square', label: 'square' },
+              { value: 'triangle', label: 'tri' },
             ]}
           />
         </ParamRow>

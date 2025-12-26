@@ -39,9 +39,11 @@ export function NumberNode({ id, selected }) {
             value={inputValue}
             onChange={e => updateParam('value', parseFloat(e.target.value) || 0)}
             step="any"
-            className="w-16 px-1.5 py-1 bg-gray-800 text-white border border-gray-700 rounded text-xs text-center focus:outline-none focus:border-purple-500"
+            className="w-16 px-1 py-1 bg-surface text-text-primary border border-gray-300 rounded text-xs font-mono
+                   focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20
+                   transition-colors duration-150"
           />
-          <span className="text-xs font-mono text-cyan-400 ml-1">
+          <span className="text-xs font-mono text-cyan-500 ml-1">
             {display}
           </span>
         </ParamRow>

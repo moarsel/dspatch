@@ -155,7 +155,7 @@ export function MeterNode({ id, selected }) {
           <span className="text-red-400">{formatCompact(histMinMax.max)}</span>
         </div>
 
-        <div className="text-center text-xs text-gray-600 mt-0.5">
+        <div className="text-center text-xs text-gray-400 mt-0.5">
           {formatFixed(20 * Math.log10(Math.max(0.0001, absLevel)), 1)} dB
         </div>
       </NodeContent>

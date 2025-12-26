@@ -48,7 +48,7 @@ export function FilterNode({ id, selected }) {
             type="target"
             position={Position.Left}
             id="input"
-            className="handle inlet audio"
+            className="handle inlet"
           />
           <label className="w-16 text-gray-500 text-xs uppercase font-semibold">input</label>
         </ParamRow>

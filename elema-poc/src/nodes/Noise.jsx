@@ -39,7 +39,7 @@ export function NoiseNode({ id, selected }) {
   const { data, updateParam } = useNodeData(id);
 
   return (
-    <NodeCard type="noise" selected={selected} headerClassName="bg-gray-500 text-gray-900">
+    <NodeCard type="noise" selected={selected} headerClassName="bg-gray-500 ">
       <NodeContent>
         <ParamRow>
           <Handle

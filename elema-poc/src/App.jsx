@@ -64,8 +64,8 @@ function App() {
       {!audioStarted && (
         <div className="audio-overlay" onClick={handleStartAudio}>
           <div className="audio-overlay-content">
-            <h2>Click to Start Audio</h2>
-            <p>Browser requires user interaction to enable audio</p>
+            <h2>Welcome</h2>
+            <p>Drag nodes onto the canvas to start. To hear audio, connect to an Output. </p>
           </div>
         </div>
       )}
@@ -97,20 +97,6 @@ function App() {
         >
           <Background variant="dots" gap={15} size={1} />
           <Controls />
-          <MiniMap
-            nodeColor={(node) => {
-              switch (node.type) {
-                case 'oscillator': return '#ff6b6b';
-                case 'gain': return '#4ecdc4';
-                case 'filter': return '#45b7d1';
-                case 'envelope': return '#f7b731';
-                case 'delay': return '#a55eea';
-                case 'output': return '#26de81';
-                case 'bang': return '#e84393';
-                default: return '#666';
-              }
-            }}
-          />
         </ReactFlow>
       </div>
     </div>

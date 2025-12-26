@@ -46,7 +46,7 @@ export function CompareNode({ id, selected }) {
   const operation = data.operation ?? 'eq';
 
   return (
-    <NodeCard type="compare" selected={selected} headerClassName="bg-yellow-500 text-gray-900">
+    <NodeCard type="compare" selected={selected} headerClassName="bg-yellow-500 ">
       <NodeContent>
         <ParamRow>
           <Handle

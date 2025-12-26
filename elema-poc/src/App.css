@@ -1,4 +1,4 @@
-/* App.css - Styles for the audio node editor */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
 * {
   box-sizing: border-box;
@@ -6,9 +6,11 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #1a1a2e;
-  color: #eee;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #1c1c1e;
+  color: #f5f5f7;
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
 }
 
 .app {
@@ -17,100 +19,73 @@ body {
   width: 100vw;
 }
 
-/* Audio Start Overlay */
+/* Audio Start Overlay - Minimal, focused */
 .audio-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   cursor: pointer;
+  backdrop-filter: blur(8px);
 }
 
 .audio-overlay-content {
   text-align: center;
-  padding: 40px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #667eea 0%, #644f9b 100%);
+  padding: 32px 48px;
+  border-radius: 8px;
+  background: #2c2c2e;
+  border: 1px solid #3a3a3c;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 .audio-overlay h2 {
-  margin: 0 0 10px;
-  font-size: 28px;
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 .audio-overlay p {
   margin: 0;
-  opacity: 0.8;
+  color: #a1a1a6;
+  font-size: 13px;
 }
 
-/* Sidebar */
+/* Sidebar - Clean, organized */
 .sidebar {
-  width: 180px;
-  background: #16213e;
-  padding: 20px;
-  border-right: 1px solid #0f3460;
+  width: 160px;
+  background: #1c1c1e;
+  padding: 16px 12px;
+  border-right: 1px solid #2c2c2e;
+  overflow-y: auto;
 }
 
 .sidebar h2 {
-  margin: 0 0 20px;
-  font-size: 16px;
+  margin: 0 0 12px;
+  font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #888;
+  letter-spacing: 0.1em;
+  color: #636366;
+  font-weight: 600;
 }
 
 .node-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 4px;
 }
-
-.sidebar-node {
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-weight: 500;
-  text-transform: capitalize;
-  transition: transform 0.1s, box-shadow 0.1s;
-  text-align: center;
-}
-
-.sidebar-node:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-
-.sidebar-node.oscillator { background: #ff6b6b; color: #fff; }
-.sidebar-node.gain { background: #4ecdc4; color: #1a1a2e; }
-.sidebar-node.filter { background: #45b7d1; color: #1a1a2e; }
-.sidebar-node.envelope { background: #f7b731; color: #1a1a2e; }
-.sidebar-node.delay { background: #a55eea; color: #fff; }
-.sidebar-node.output { background: #26de81; color: #1a1a2e; }
-.sidebar-node.bang { background: #e84393; color: #fff; }
-.sidebar-node.noise { background: #95a5a6; color: #1a1a2e; }
-.sidebar-node.lfo { background: #fd79a8; color: #1a1a2e; }
-.sidebar-node.mix { background: #00cec9; color: #1a1a2e; }
-.sidebar-node.notetofreq { background: #74b9ff; color: #1a1a2e; }
-.sidebar-node.number { background: #636e72; color: #fff; }
-.sidebar-node.math { background: #b2bec3; color: #1a1a2e; }
-.sidebar-node.compare { background: #fdcb6e; color: #1a1a2e; }
-.sidebar-node.scope { background: #00b894; color: #fff; }
-.sidebar-node.meter { background: #e17055; color: #fff; }
-.sidebar-node.fft { background: #6c5ce7; color: #fff; }
-.sidebar-node.probe { background: #81ecec; color: #1a1a2e; }
-.sidebar-node.metro { background: #fab1a0; color: #1a1a2e; }
-.sidebar-node.sequencer { background: #a29bfe; color: #1a1a2e; }
 
 /* Canvas */
 .canvas {
   flex: 1;
   height: 100%;
+  background: #1c1c1e;
 }
 
 /* React Flow overrides */
@@ -123,61 +98,94 @@ body {
 
 /* Handles */
 .handle {
-  width: 16px !important;
-  height: 16px !important;
-  border: 2px solid #333 !important;
-  background: #667eea !important;
+  width: 18px !important;
+  height: 18px !important;
+  border: 2px solid #48484a !important;
+  background: #0b0b0b !important;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.handle:hover {
+  background: #5a5a5c !important;
+  cursor: pointer;
+}
+.handle:active {
+  background: #a3a3a7 !important;
+  cursor: grabbing;
 }
 
 .handle.inlet {
-  left: -17px !important;
+  left: -26px !important;
 }
 
-.handle.inlet.audio {
-  background: #26de81 !important;
+.handle.inlet:hover {
+  background: #acbaed !important;
+  border-color: #516fe5 !important;
 }
+
 
 .handle.outlet {
-  right: -7px !important;
-  background: #ff6b6b !important;
+  right: -9px !important;
+  background: #48484a !important;
+  border-color: #0b0b0b !important;
 }
 
-/* Edge styling */
+.handle.outlet:hover {
+  background: #ff8c5a !important;
+  border-color: #c24915 !important;
+}
+
+/* Edge styling - Clean lines */
 .react-flow__edge-path {
-  stroke: #667eea !important;
-  stroke-width: 2 !important;
+  stroke: #d3d3e6 !important;
+  stroke-width: 3 !important;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: #ff6b35 !important;
 }
 
 .react-flow__edge.animated path {
-  stroke-dasharray: 5 !important;
-  animation: dash 0.5s linear infinite !important;
+  stroke-dasharray: 8 !important;
+  animation: dash 1s linear infinite !important;
 }
 
 @keyframes dash {
   to {
-    stroke-dashoffset: -10;
+    stroke-dashoffset: -16;
   }
 }
 
-/* MiniMap */
+/* MiniMap - Subtle */
 .react-flow__minimap {
-  background: #16213e !important;
-  border: 1px solid #0f3460 !important;
+  background: #2c2c2e !important;
+  border: 1px solid #3a3a3c !important;
+  border-radius: 4px !important;
 }
 
-/* Controls */
+/* Controls - Hardware-inspired */
 .react-flow__controls {
-  background: #16213e !important;
-  border: 1px solid #0f3460 !important;
-  border-radius: 8px !important;
+  background: #2c2c2e !important;
+  border: 1px solid #3a3a3c !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
 }
 
 .react-flow__controls-button {
-  background: #1e1e2e !important;
-  border-color: #333 !important;
-  fill: #888 !important;
+  background: #2c2c2e !important;
+  border-color: #3a3a3c !important;
+  fill: #a1a1a6 !important;
+  width: 24px !important;
+  height: 24px !important;
 }
 
 .react-flow__controls-button:hover {
-  background: #2a2a3e !important;
+  background: #3a3a3c !important;
+  fill: #f5f5f7 !important;
+}
+
+/* Background dots */
+.react-flow__background {
+  background: #1c1c1e !important;
 }

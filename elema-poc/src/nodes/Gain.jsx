@@ -34,16 +34,16 @@ export function GainNode({ id, selected }) {
   const { data, updateParam } = useNodeData(id);
 
   return (
-    <NodeCard type="gain" selected={selected} headerClassName="bg-cyan-400 text-gray-900">
+    <NodeCard type="gain" selected={selected} category="process">
       <NodeContent>
         <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="input"
-            className="handle inlet audio"
+            className="handle inlet"
           />
-          <label className="w-16 text-gray-500 text-xs uppercase font-semibold">input</label>
+          <label className="w-8 text-text-muted text-xxs uppercase font-medium tracking-wide">in</label>
         </ParamRow>
 
         <ParamRow>
