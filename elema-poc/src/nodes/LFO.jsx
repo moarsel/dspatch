@@ -2,6 +2,7 @@
 import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
+import { formatFixed } from '../engine/format';
 
 export const descriptor = {
   type: 'lfo',
@@ -62,7 +63,7 @@ export function LFONode({ id, selected }) {
             max="20"
             step="0.1"
           />
-          <span className="value">{(data.rate ?? 1).toFixed(1)}Hz</span>
+          <span className="value">{formatFixed(data.rate ?? 1, 1)}Hz</span>
         </div>
 
         <div className="param-row">
@@ -81,7 +82,7 @@ export function LFONode({ id, selected }) {
             max="1"
             step="0.01"
           />
-          <span className="value">{(data.depth ?? 1).toFixed(2)}</span>
+          <span className="value">{formatFixed(data.depth ?? 1, 2)}</span>
         </div>
 
         <div className="param-row">

@@ -2,6 +2,7 @@
 import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
+import { formatFixed } from '../engine/format';
 
 export const descriptor = {
   type: 'filter',
@@ -87,7 +88,7 @@ export function FilterNode({ id, selected }) {
             max="20"
             step="0.1"
           />
-          <span className="value">{(data.q ?? 1).toFixed(1)}</span>
+          <span className="value">{formatFixed(data.q ?? 1, 1)}</span>
         </div>
 
         <div className="param-row">

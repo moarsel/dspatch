@@ -2,6 +2,7 @@
 import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
+import { formatFixed } from '../engine/format';
 
 export const descriptor = {
   type: 'gain',
@@ -62,7 +63,7 @@ export function GainNode({ id, selected }) {
             max="2"
             step="0.01"
           />
-          <span className="value">{(data.gain ?? 1).toFixed(2)}</span>
+          <span className="value">{formatFixed(data.gain ?? 1, 2)}</span>
         </div>
       </div>
 

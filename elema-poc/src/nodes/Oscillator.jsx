@@ -2,6 +2,7 @@
 import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
+import { formatFixed } from '../engine/format';
 
 export const descriptor = {
   type: 'oscillator',
@@ -79,7 +80,7 @@ export function OscillatorNode({ id, selected }) {
             max="1"
             step="0.01"
           />
-          <span className="value">{(data.gain ?? 0.5).toFixed(2)}</span>
+          <span className="value">{formatFixed(data.gain ?? 0.5, 2)}</span>
         </div>
 
         <div className="param-row">

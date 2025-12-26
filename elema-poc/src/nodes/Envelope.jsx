@@ -2,6 +2,8 @@
 import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
+import { useSignalValue } from '../engine/useSignalValue';
+import { formatFixed } from '../engine/format';
 
 export const descriptor = {
   type: 'envelope',
@@ -14,25 +16,25 @@ export const descriptor = {
   },
   outlets: ['signal'],
   compile: (inputs, nodeId) => {
-    const gate = inputs.gate;
-    const attack = inputs.attack;
-    const decay = inputs.decay;
-    const sustain = inputs.sustain;
-    const release = inputs.release;
-
-    // Gate needs to be a signal - if it's a number, make it a const
-    const gateSignal = typeof gate === 'number'
-      ? el.const({ key: `${nodeId}:gate`, value: gate })
-      : gate;
+    // Elementary handles numbers automatically
+    const env = el.adsr(
+      inputs.attack ?? 0.01,
+      inputs.decay ?? 0.1,
+      inputs.sustain ?? 0.7,
+      inputs.release ?? 0.3,
+      inputs.gate ?? 0
+    );
 
     return {
-      signal: el.adsr(attack, decay, sustain, release, gateSignal)
+      signal: el.meter({ name: nodeId }, env)
     };
   }
 };
 
 export function EnvelopeNode({ id, selected }) {
   const { data, updateParam } = useNodeData(id);
+  const { value: envValue, display } = useSignalValue(id);
+  const gateActive = data.gate || envValue > 0.01;
 
   return (
     <div className={`audio-node envelope ${selected ? 'selected' : ''}`}>
@@ -47,13 +49,21 @@ export function EnvelopeNode({ id, selected }) {
           />
           <label>gate</label>
           <button
-            className={`gate-button ${data.gate ? 'active' : ''}`}
+            className={`gate-button ${gateActive ? 'active' : ''}`}
             onMouseDown={(e) => { e.stopPropagation(); updateParam('gate', 1); }}
             onMouseUp={(e) => { e.stopPropagation(); updateParam('gate', 0); }}
             onMouseLeave={() => updateParam('gate', 0)}
           >
-            {data.gate ? 'ON' : 'OFF'}
+            {gateActive ? 'ON' : 'OFF'}
           </button>
+          <span style={{
+            fontSize: '10px',
+            fontFamily: 'monospace',
+            color: '#81ecec',
+            marginLeft: '4px'
+          }}>
+            {display}
+          </span>
         </div>
 
         <div className="param-row">
@@ -72,7 +82,7 @@ export function EnvelopeNode({ id, selected }) {
             max="2"
             step="0.001"
           />
-          <span className="value">{(data.attack ?? 0.01).toFixed(3)}s</span>
+          <span className="value">{formatFixed(data.attack ?? 0.01, 3)}s</span>
         </div>
 
         <div className="param-row">
@@ -91,7 +101,7 @@ export function EnvelopeNode({ id, selected }) {
             max="2"
             step="0.001"
           />
-          <span className="value">{(data.decay ?? 0.1).toFixed(3)}s</span>
+          <span className="value">{formatFixed(data.decay ?? 0.1, 3)}s</span>
         </div>
 
         <div className="param-row">
@@ -110,7 +120,7 @@ export function EnvelopeNode({ id, selected }) {
             max="1"
             step="0.01"
           />
-          <span className="value">{(data.sustain ?? 0.7).toFixed(2)}</span>
+          <span className="value">{formatFixed(data.sustain ?? 0.7, 2)}</span>
         </div>
 
         <div className="param-row">
@@ -129,7 +139,7 @@ export function EnvelopeNode({ id, selected }) {
             max="5"
             step="0.001"
           />
-          <span className="value">{(data.release ?? 0.3).toFixed(3)}s</span>
+          <span className="value">{formatFixed(data.release ?? 0.3, 3)}s</span>
         </div>
       </div>
 

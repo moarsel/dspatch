@@ -2,6 +2,7 @@
 import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
+import { formatFixed } from '../engine/format';
 
 export const descriptor = {
   type: 'delay',
@@ -102,7 +103,7 @@ export function DelayNode({ id, selected }) {
             max="0.95"
             step="0.01"
           />
-          <span className="value">{(data.feedback ?? 0.3).toFixed(2)}</span>
+          <span className="value">{formatFixed(data.feedback ?? 0.3, 2)}</span>
         </div>
 
         <div className="param-row">
@@ -121,7 +122,7 @@ export function DelayNode({ id, selected }) {
             max="1"
             step="0.01"
           />
-          <span className="value">{(data.mix ?? 0.5).toFixed(2)}</span>
+          <span className="value">{formatFixed(data.mix ?? 0.5, 2)}</span>
         </div>
       </div>
 

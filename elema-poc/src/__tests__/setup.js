@@ -1,5 +1,6 @@
 // Test setup with custom matchers
 import { expect } from 'vitest';
+import { formatFixed } from '../engine/format';
 
 expect.extend({
   toHaveNonZeroRMS(buffer, threshold = 0.001) {
@@ -11,8 +12,8 @@ expect.extend({
       pass,
       message: () =>
         pass
-          ? `Expected RMS to be less than ${threshold}, got ${rms.toFixed(6)}`
-          : `Expected RMS to be greater than ${threshold}, got ${rms.toFixed(6)} (silence detected)`,
+          ? `Expected RMS to be less than ${threshold}, got ${formatFixed(rms, 6)}`
+          : `Expected RMS to be greater than ${threshold}, got ${formatFixed(rms, 6)} (silence detected)`,
       actual: rms,
     };
   },
@@ -24,8 +25,8 @@ expect.extend({
       pass,
       message: () =>
         pass
-          ? `Expected non-silent buffer, max amplitude: ${maxAbs.toFixed(6)}`
-          : `Expected silent buffer, max amplitude: ${maxAbs.toFixed(6)}`,
+          ? `Expected non-silent buffer, max amplitude: ${formatFixed(maxAbs, 6)}`
+          : `Expected silent buffer, max amplitude: ${formatFixed(maxAbs, 6)}`,
       actual: maxAbs,
     };
   },

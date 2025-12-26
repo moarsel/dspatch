@@ -1,6 +1,9 @@
 // compile.js - Graph compilation: nodes + edges -> Elementary Audio graph
 import { el } from '@elemaudio/core';
 
+// Visualizer node types that should work even without output connections
+const VISUALIZER_TYPES = new Set(['scope', 'meter', 'fft', 'probe']);
+
 /**
  * Topological sort using Kahn's algorithm
  * Returns nodes in order where dependencies come before dependents
@@ -107,13 +110,37 @@ export function compileGraph(nodes, edges, registry) {
 
   // Find output node and return its signals
   const outputNode = nodes.find(n => n.type === 'output');
-  if (outputNode) {
-    const outputs = compiled.get(outputNode.id);
-    return {
-      left: outputs?.left ?? el.const({ value: 0 }),
-      right: outputs?.right ?? el.const({ value: 0 })
-    };
+  if (!outputNode) {
+    return null;
   }
 
-  return null;
+  const outputs = compiled.get(outputNode.id);
+  let left = outputs?.left ?? el.const({ value: 0 });
+  let right = outputs?.right ?? el.const({ value: 0 });
+
+  // Find orphan visualizers: visualizer nodes with inputs but outputs not connected
+  const orphanVisualizers = nodes.filter(n => {
+    if (!VISUALIZER_TYPES.has(n.type)) return false;
+
+    // Check if this node has an input connected
+    const hasInput = edges.some(e => e.target === n.id);
+    if (!hasInput) return false;
+
+    // Check if this node's output is NOT connected to anything
+    const hasOutput = edges.some(e => e.source === n.id);
+    return !hasOutput;
+  });
+
+  // Include orphan visualizers in the render graph at zero gain
+  // This ensures they fire events without affecting audio
+  for (const vizNode of orphanVisualizers) {
+    const vizOutputs = compiled.get(vizNode.id);
+    if (vizOutputs?.signal) {
+      // Mix at zero gain: signal is in graph but contributes nothing to audio
+      const silent = el.mul(el.const({ key: `${vizNode.id}:zero`, value: 0 }), vizOutputs.signal);
+      left = el.add(left, silent);
+    }
+  }
+
+  return { left, right };
 }

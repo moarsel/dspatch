@@ -2,6 +2,7 @@
 import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
+import { formatFixed } from '../engine/format';
 
 // Note names for the GUI selector
 const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
@@ -111,7 +112,7 @@ export function NoteToFreqNode({ id, selected }) {
             max="127"
             style={{ width: '50px' }}
           />
-          <span className="value">{currentFreq.toFixed(1)}Hz</span>
+          <span className="value">{formatFixed(currentFreq, 1)}Hz</span>
         </div>
       </div>
 

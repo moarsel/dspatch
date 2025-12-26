@@ -12,6 +12,13 @@ import { MixNode, descriptor as mixDescriptor } from './Mix';
 import { NoteToFreqNode, descriptor as noteToFreqDescriptor } from './NoteToFreq';
 import { NumberNode, descriptor as numberDescriptor } from './Number';
 import { MathNode, descriptor as mathDescriptor } from './Math';
+import { CompareNode, descriptor as compareDescriptor } from './Compare';
+import { ScopeNode, descriptor as scopeDescriptor } from './Scope';
+import { MeterNode, descriptor as meterDescriptor } from './Meter';
+import { FFTNode, descriptor as fftDescriptor } from './FFT';
+import { ProbeNode, descriptor as probeDescriptor } from './Probe';
+import { MetroNode, descriptor as metroDescriptor } from './Metro';
+import { SequencerNode, descriptor as sequencerDescriptor } from './Sequencer';
 
 // Registry: type -> { descriptor, Component }
 export const registry = {
@@ -66,6 +73,34 @@ export const registry = {
   math: {
     descriptor: mathDescriptor,
     Component: MathNode,
+  },
+  compare: {
+    descriptor: compareDescriptor,
+    Component: CompareNode,
+  },
+  scope: {
+    descriptor: scopeDescriptor,
+    Component: ScopeNode,
+  },
+  meter: {
+    descriptor: meterDescriptor,
+    Component: MeterNode,
+  },
+  fft: {
+    descriptor: fftDescriptor,
+    Component: FFTNode,
+  },
+  probe: {
+    descriptor: probeDescriptor,
+    Component: ProbeNode,
+  },
+  metro: {
+    descriptor: metroDescriptor,
+    Component: MetroNode,
+  },
+  sequencer: {
+    descriptor: sequencerDescriptor,
+    Component: SequencerNode,
   },
 };
 

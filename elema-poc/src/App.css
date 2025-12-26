@@ -99,6 +99,13 @@ body {
 .sidebar-node.notetofreq { background: #74b9ff; color: #1a1a2e; }
 .sidebar-node.number { background: #636e72; color: #fff; }
 .sidebar-node.math { background: #b2bec3; color: #1a1a2e; }
+.sidebar-node.compare { background: #fdcb6e; color: #1a1a2e; }
+.sidebar-node.scope { background: #00b894; color: #fff; }
+.sidebar-node.meter { background: #e17055; color: #fff; }
+.sidebar-node.fft { background: #6c5ce7; color: #fff; }
+.sidebar-node.probe { background: #81ecec; color: #1a1a2e; }
+.sidebar-node.metro { background: #fab1a0; color: #1a1a2e; }
+.sidebar-node.sequencer { background: #a29bfe; color: #1a1a2e; }
 
 /* Canvas */
 .canvas {
@@ -156,6 +163,13 @@ body {
 .notetofreq .node-header { background: #74b9ff; color: #1a1a2e; }
 .number .node-header { background: #636e72; color: #fff; }
 .math .node-header { background: #b2bec3; color: #1a1a2e; }
+.compare .node-header { background: #fdcb6e; color: #1a1a2e; }
+.scope .node-header { background: #00b894; color: #fff; }
+.meter .node-header { background: #e17055; color: #fff; }
+.fft .node-header { background: #6c5ce7; color: #fff; }
+.probe .node-header { background: #81ecec; color: #1a1a2e; }
+.metro .node-header { background: #fab1a0; color: #1a1a2e; }
+.sequencer .node-header { background: #a29bfe; color: #1a1a2e; }
 
 .node-content {
   padding: 8px;

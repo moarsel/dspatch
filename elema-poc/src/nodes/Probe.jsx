@@ -1,54 +1,47 @@
-// Number.jsx - Constant value source node
+// Probe.jsx - Numeric signal inspector for debugging signal math
 import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
-import { useNodeData } from '../engine/useGraph';
 import { useSignalValue } from '../engine/useSignalValue';
 
 export const descriptor = {
-  type: 'number',
+  type: 'probe',
   inlets: {
-    value: { default: 0 },
+    input: { default: 0 },
   },
   outlets: ['signal'],
   compile: (inputs, nodeId) => {
     // Wrap in meter for visualization - Elementary handles numbers automatically
     return {
-      signal: el.meter({ name: nodeId }, inputs.value ?? 0)
+      signal: el.meter({ name: nodeId }, inputs.input ?? 0)
     };
   }
 };
 
-export function NumberNode({ id, selected }) {
-  const { data, updateParam } = useNodeData(id);
+export function ProbeNode({ id, selected }) {
   const { display } = useSignalValue(id);
-  const inputValue = data.value ?? 0;
 
   return (
-    <div className={`audio-node number ${selected ? 'selected' : ''}`}>
-      <div className="node-header">Number</div>
+    <div className={`audio-node probe ${selected ? 'selected' : ''}`}>
+      <div className="node-header">Probe</div>
       <div className="node-content nodrag">
         <div className="param-row">
           <Handle
             type="target"
             position={Position.Left}
-            id="value"
+            id="input"
             className="handle inlet"
           />
-          <input
-            type="number"
-            value={inputValue}
-            onChange={e => updateParam('value', parseFloat(e.target.value) || 0)}
-            step="any"
-            style={{ width: '60px', textAlign: 'center' }}
-          />
-          <span style={{
-            fontSize: '10px',
+          <div style={{
+            flex: 1,
+            textAlign: 'center',
             fontFamily: 'monospace',
+            fontSize: '18px',
+            fontWeight: 'bold',
             color: '#81ecec',
-            marginLeft: '4px'
+            padding: '8px 4px'
           }}>
             {display}
-          </span>
+          </div>
         </div>
       </div>
 

@@ -1,48 +1,53 @@
-// Math.jsx - Mathematical operations node
+// Compare.jsx - Comparison and logical operations node
 import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
-import { useSignalValue } from '../engine/useSignalValue';
 
 const OPERATIONS = {
-  add: { symbol: '+', fn: (a, b) => el.add(a, b) },
-  subtract: { symbol: '-', fn: (a, b) => el.sub(a, b) },
-  multiply: { symbol: '*', fn: (a, b) => el.mul(a, b) },
-  divide: { symbol: '/', fn: (a, b) => el.div(a, b) },
-  modulo: { symbol: '%', fn: (a, b) => el.mod(a, b) },
-  power: { symbol: '^', fn: (a, b) => el.pow(a, b) },
-  min: { symbol: 'min', fn: (a, b) => el.min(a, b) },
-  max: { symbol: 'max', fn: (a, b) => el.max(a, b) },
+  eq: { symbol: '==', fn: (a, b) => el.eq(a, b) },
+  le: { symbol: '<', fn: (a, b) => el.le(a, b) },
+  leq: { symbol: '<=', fn: (a, b) => el.leq(a, b) },
+  ge: { symbol: '>', fn: (a, b) => el.ge(a, b) },
+  geq: { symbol: '>=', fn: (a, b) => el.geq(a, b) },
+  and: { symbol: '&&', fn: (a, b) => el.and(a, b) },
+  or: { symbol: '||', fn: (a, b) => el.or(a, b) },
 };
 
 export const descriptor = {
-  type: 'math',
+  type: 'compare',
   inlets: {
     a: { default: 0 },
     b: { default: 0 },
   },
   outlets: ['signal'],
   compile: (inputs, nodeId) => {
-    const op = inputs.operation ?? 'add';
-    const operation = OPERATIONS[op] || OPERATIONS.add;
+    const a = inputs.a;
+    const b = inputs.b;
+    const op = inputs.operation ?? 'eq';
+    const operation = OPERATIONS[op] || OPERATIONS.eq;
 
-    // Elementary handles numbers automatically
-    const result = operation.fn(inputs.a ?? 0, inputs.b ?? 0);
+    // Wrap numbers in el.const
+    const signalA = typeof a === 'number'
+      ? el.const({ key: `${nodeId}:a`, value: a })
+      : a;
+    const signalB = typeof b === 'number'
+      ? el.const({ key: `${nodeId}:b`, value: b })
+      : b;
 
     return {
-      signal: el.meter({ name: nodeId }, result)
+      signal: operation.fn(signalA, signalB)
     };
   }
 };
 
-export function MathNode({ id, selected }) {
+export function CompareNode({ id, selected }) {
   const { data, updateParam } = useNodeData(id);
-  const { display } = useSignalValue(id);
-  const operation = data.operation ?? 'add';
+  const operation = data.operation ?? 'eq';
+  const opInfo = OPERATIONS[operation];
 
   return (
-    <div className={`audio-node math ${selected ? 'selected' : ''}`}>
-      <div className="node-header">Math</div>
+    <div className={`audio-node compare ${selected ? 'selected' : ''}`}>
+      <div className="node-header">Compare</div>
       <div className="node-content nodrag">
         <div className="param-row">
           <Handle
@@ -90,20 +95,6 @@ export function MathNode({ id, selected }) {
               </option>
             ))}
           </select>
-        </div>
-
-        <div style={{
-          textAlign: 'center',
-          fontSize: '12px',
-          fontFamily: 'monospace',
-          fontWeight: 'bold',
-          color: '#81ecec',
-          marginTop: '4px',
-          padding: '4px',
-          background: '#1a1a2e',
-          borderRadius: '4px'
-        }}>
-          = {display}
         </div>
       </div>
 
