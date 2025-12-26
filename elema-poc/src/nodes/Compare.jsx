@@ -2,6 +2,7 @@
 import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
+import { NodeCard, NodeContent, ParamRow, NumberInput, SelectInput } from '../components';
 
 const OPERATIONS = {
   eq: { symbol: '==', fn: (a, b) => el.eq(a, b) },
@@ -43,60 +44,52 @@ export const descriptor = {
 export function CompareNode({ id, selected }) {
   const { data, updateParam } = useNodeData(id);
   const operation = data.operation ?? 'eq';
-  const opInfo = OPERATIONS[operation];
 
   return (
-    <div className={`audio-node compare ${selected ? 'selected' : ''}`}>
-      <div className="node-header">Compare</div>
-      <div className="node-content nodrag">
-        <div className="param-row">
+    <NodeCard type="compare" selected={selected} headerClassName="bg-yellow-500 text-gray-900">
+      <NodeContent>
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="a"
             className="handle inlet"
           />
-          <label>A</label>
-          <input
-            type="number"
+          <NumberInput
+            label="A"
             value={data.a ?? 0}
             onChange={e => updateParam('a', parseFloat(e.target.value) || 0)}
             step="any"
-            style={{ width: '60px' }}
           />
-        </div>
+        </ParamRow>
 
-        <div className="param-row">
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="b"
             className="handle inlet"
           />
-          <label>B</label>
-          <input
-            type="number"
+          <NumberInput
+            label="B"
             value={data.b ?? 0}
             onChange={e => updateParam('b', parseFloat(e.target.value) || 0)}
             step="any"
-            style={{ width: '60px' }}
           />
-        </div>
+        </ParamRow>
 
-        <div className="param-row">
-          <label>op</label>
-          <select
+        <ParamRow>
+          <SelectInput
+            label="op"
             value={operation}
             onChange={e => updateParam('operation', e.target.value)}
-          >
-            {Object.entries(OPERATIONS).map(([key, { symbol }]) => (
-              <option key={key} value={key}>
-                {symbol} ({key})
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+            options={Object.entries(OPERATIONS).map(([key, { symbol }]) => ({
+              value: key,
+              label: `${symbol} (${key})`
+            }))}
+          />
+        </ParamRow>
+      </NodeContent>
 
       <Handle
         type="source"
@@ -104,6 +97,6 @@ export function CompareNode({ id, selected }) {
         id="signal"
         className="handle outlet"
       />
-    </div>
+    </NodeCard>
   );
 }

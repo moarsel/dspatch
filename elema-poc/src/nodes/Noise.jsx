@@ -3,6 +3,7 @@ import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
 import { formatFixed } from '../engine/format';
+import { NodeCard, NodeContent, ParamRow, RangeInput, SelectInput, ValueDisplay } from '../components';
 
 export const descriptor = {
   type: 'noise',
@@ -38,39 +39,38 @@ export function NoiseNode({ id, selected }) {
   const { data, updateParam } = useNodeData(id);
 
   return (
-    <div className={`audio-node noise ${selected ? 'selected' : ''}`}>
-      <div className="node-header">Noise</div>
-      <div className="node-content nodrag">
-        <div className="param-row">
+    <NodeCard type="noise" selected={selected} headerClassName="bg-gray-500 text-gray-900">
+      <NodeContent>
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="gain"
             className="handle inlet"
           />
-          <label>gain</label>
-          <input
-            type="range"
+          <RangeInput
+            label="gain"
             value={data.gain ?? 0.5}
             onChange={e => updateParam('gain', parseFloat(e.target.value))}
             min="0"
             max="1"
             step="0.01"
           />
-          <span className="value">{formatFixed(data.gain ?? 0.5, 2)}</span>
-        </div>
+          <ValueDisplay value={data.gain ?? 0.5} />
+        </ParamRow>
 
-        <div className="param-row">
-          <label>type</label>
-          <select
+        <ParamRow>
+          <SelectInput
+            label="type"
             value={data.noiseType ?? 'white'}
             onChange={e => updateParam('noiseType', e.target.value)}
-          >
-            <option value="white">White</option>
-            <option value="pink">Pink</option>
-          </select>
-        </div>
-      </div>
+            options={[
+              { value: 'white', label: 'White' },
+              { value: 'pink', label: 'Pink' },
+            ]}
+          />
+        </ParamRow>
+      </NodeContent>
 
       <Handle
         type="source"
@@ -78,6 +78,6 @@ export function NoiseNode({ id, selected }) {
         id="signal"
         className="handle outlet"
       />
-    </div>
+    </NodeCard>
   );
 }

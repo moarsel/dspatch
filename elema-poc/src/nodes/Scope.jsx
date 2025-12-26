@@ -5,6 +5,7 @@ import { useNodeData } from '../engine/useGraph';
 import { subscribe, unsubscribe } from '../engine/audioContext';
 import { formatCompact } from '../engine/format';
 import { useEffect, useState, useRef } from 'react';
+import { NodeCard, NodeContent, ParamRow } from '../components';
 
 const SCOPE_WIDTH = 140;
 const SCOPE_HEIGHT = 60;
@@ -105,20 +106,19 @@ export function ScopeNode({ id, selected }) {
   };
 
   return (
-    <div className={`audio-node scope ${selected ? 'selected' : ''}`}>
-      <div className="node-header">Scope</div>
-      <div className="node-content nodrag">
-        <div className="param-row">
+    <NodeCard type="scope" selected={selected} headerClassName="bg-green-600 text-white">
+      <NodeContent>
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="input"
             className="handle inlet"
           />
-          <label>in</label>
-        </div>
+          <label className="w-6 text-gray-500 text-xs uppercase font-semibold">in</label>
+        </ParamRow>
 
-        <div className="scope-display" style={{ position: 'relative' }}>
+        <div className="relative">
           <svg
             width={SCOPE_WIDTH}
             height={SCOPE_HEIGHT}
@@ -142,24 +142,14 @@ export function ScopeNode({ id, selected }) {
               strokeWidth="1.5"
             />
           </svg>
-          <span style={{
-            position: 'absolute',
-            top: '2px',
-            right: '4px',
-            fontSize: '9px',
-            fontFamily: 'monospace',
-            color: '#ff7675'
-          }}>{formatCompact(minMax.max)}</span>
-          <span style={{
-            position: 'absolute',
-            bottom: '2px',
-            right: '4px',
-            fontSize: '9px',
-            fontFamily: 'monospace',
-            color: '#74b9ff'
-          }}>{formatCompact(minMax.min)}</span>
+          <span className="absolute top-0.5 right-1 text-xs font-mono text-red-400">
+            {formatCompact(minMax.max)}
+          </span>
+          <span className="absolute bottom-0.5 right-1 text-xs font-mono text-blue-400">
+            {formatCompact(minMax.min)}
+          </span>
         </div>
-      </div>
+      </NodeContent>
 
       <Handle
         type="source"
@@ -167,6 +157,6 @@ export function ScopeNode({ id, selected }) {
         id="signal"
         className="handle outlet"
       />
-    </div>
+    </NodeCard>
   );
 }

@@ -2,6 +2,7 @@
 import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useSignalValue } from '../engine/useSignalValue';
+import { NodeCard, NodeContent, ParamRow } from '../components';
 
 export const descriptor = {
   type: 'probe',
@@ -21,29 +22,20 @@ export function ProbeNode({ id, selected }) {
   const { display } = useSignalValue(id);
 
   return (
-    <div className={`audio-node probe ${selected ? 'selected' : ''}`}>
-      <div className="node-header">Probe</div>
-      <div className="node-content nodrag">
-        <div className="param-row">
+    <NodeCard type="probe" selected={selected} headerClassName="bg-cyan-300 text-gray-900">
+      <NodeContent>
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="input"
             className="handle inlet"
           />
-          <div style={{
-            flex: 1,
-            textAlign: 'center',
-            fontFamily: 'monospace',
-            fontSize: '18px',
-            fontWeight: 'bold',
-            color: '#81ecec',
-            padding: '8px 4px'
-          }}>
+          <div className="flex-1 text-center font-mono text-lg font-bold text-cyan-400 py-2">
             {display}
           </div>
-        </div>
-      </div>
+        </ParamRow>
+      </NodeContent>
 
       <Handle
         type="source"
@@ -51,6 +43,6 @@ export function ProbeNode({ id, selected }) {
         id="signal"
         className="handle outlet"
       />
-    </div>
+    </NodeCard>
   );
 }

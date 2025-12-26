@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
 import { useSignalValue } from '../engine/useSignalValue';
 import { formatFixed } from '../engine/format';
+import { NodeCard, NodeContent, ParamRow, RangeInput, GateButton, ValueDisplay } from '../components';
 
 export const descriptor = {
   type: 'envelope',
@@ -37,111 +38,98 @@ export function EnvelopeNode({ id, selected }) {
   const gateActive = data.gate || envValue > 0.01;
 
   return (
-    <div className={`audio-node envelope ${selected ? 'selected' : ''}`}>
-      <div className="node-header">Envelope</div>
-      <div className="node-content nodrag">
-        <div className="param-row">
+    <NodeCard type="envelope" selected={selected} headerClassName="bg-yellow-400 text-gray-900">
+      <NodeContent>
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="gate"
             className="handle inlet"
           />
-          <label>gate</label>
-          <button
-            className={`gate-button ${gateActive ? 'active' : ''}`}
+          <GateButton
+            active={gateActive}
             onMouseDown={(e) => { e.stopPropagation(); updateParam('gate', 1); }}
             onMouseUp={(e) => { e.stopPropagation(); updateParam('gate', 0); }}
             onMouseLeave={() => updateParam('gate', 0)}
-          >
-            {gateActive ? 'ON' : 'OFF'}
-          </button>
-          <span style={{
-            fontSize: '10px',
-            fontFamily: 'monospace',
-            color: '#81ecec',
-            marginLeft: '4px'
-          }}>
+          />
+          <span className="text-xs font-mono text-cyan-400 ml-1">
             {display}
           </span>
-        </div>
+        </ParamRow>
 
-        <div className="param-row">
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="attack"
             className="handle inlet"
           />
-          <label>A</label>
-          <input
-            type="range"
+          <RangeInput
+            label="A"
             value={data.attack ?? 0.01}
             onChange={e => updateParam('attack', parseFloat(e.target.value))}
             min="0.001"
             max="2"
             step="0.001"
           />
-          <span className="value">{formatFixed(data.attack ?? 0.01, 3)}s</span>
-        </div>
+          <ValueDisplay value={`${formatFixed(data.attack ?? 0.01, 3)}s`} />
+        </ParamRow>
 
-        <div className="param-row">
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="decay"
             className="handle inlet"
           />
-          <label>D</label>
-          <input
-            type="range"
+          <RangeInput
+            label="D"
             value={data.decay ?? 0.1}
             onChange={e => updateParam('decay', parseFloat(e.target.value))}
             min="0.001"
             max="2"
             step="0.001"
           />
-          <span className="value">{formatFixed(data.decay ?? 0.1, 3)}s</span>
-        </div>
+          <ValueDisplay value={`${formatFixed(data.decay ?? 0.1, 3)}s`} />
+        </ParamRow>
 
-        <div className="param-row">
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="sustain"
             className="handle inlet"
           />
-          <label>S</label>
-          <input
-            type="range"
+          <RangeInput
+            label="S"
             value={data.sustain ?? 0.7}
             onChange={e => updateParam('sustain', parseFloat(e.target.value))}
             min="0"
             max="1"
             step="0.01"
           />
-          <span className="value">{formatFixed(data.sustain ?? 0.7, 2)}</span>
-        </div>
+          <ValueDisplay value={data.sustain ?? 0.7} />
+        </ParamRow>
 
-        <div className="param-row">
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="release"
             className="handle inlet"
           />
-          <label>R</label>
-          <input
-            type="range"
+          <RangeInput
+            label="R"
             value={data.release ?? 0.3}
             onChange={e => updateParam('release', parseFloat(e.target.value))}
             min="0.001"
             max="5"
             step="0.001"
           />
-          <span className="value">{formatFixed(data.release ?? 0.3, 3)}s</span>
-        </div>
-      </div>
+          <ValueDisplay value={`${formatFixed(data.release ?? 0.3, 3)}s`} />
+        </ParamRow>
+      </NodeContent>
 
       <Handle
         type="source"
@@ -149,6 +137,6 @@ export function EnvelopeNode({ id, selected }) {
         id="signal"
         className="handle outlet"
       />
-    </div>
+    </NodeCard>
   );
 }

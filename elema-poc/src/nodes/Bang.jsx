@@ -3,6 +3,7 @@ import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
 import { useSignalHigh } from '../engine/useSignalValue';
+import { NodeCard, NodeContent, ParamRow, BangButton } from '../components';
 
 export const descriptor = {
   type: 'bang',
@@ -26,18 +27,17 @@ export function BangNode({ id, selected }) {
   const showActive = data.gate || isActive;
 
   return (
-    <div className={`audio-node bang ${selected ? 'selected' : ''}`}>
-      <div className="node-header">Bang</div>
-      <div className="node-content nodrag">
-        <div className="param-row center">
+    <NodeCard type="bang" selected={selected} headerClassName="bg-pink-500 text-white">
+      <NodeContent>
+        <ParamRow centered>
           <Handle
             type="target"
             position={Position.Left}
             id="gate"
             className="handle inlet"
           />
-          <button
-            className={`bang-button ${showActive ? 'active' : ''}`}
+          <BangButton
+            active={showActive}
             onMouseDown={(e) => {
               e.stopPropagation();
               updateParam('gate', 1);
@@ -47,17 +47,15 @@ export function BangNode({ id, selected }) {
               updateParam('gate', 0);
             }}
             onMouseLeave={() => updateParam('gate', 0)}
-          >
-            ●
-          </button>
-        </div>
-      </div>
+          />
+        </ParamRow>
+      </NodeContent>
       <Handle
         type="source"
         position={Position.Right}
         id="signal"
         className="handle outlet"
       />
-    </div>
+    </NodeCard>
   );
 }

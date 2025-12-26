@@ -5,6 +5,7 @@ import { useNodeData } from '../engine/useGraph';
 import { subscribe, unsubscribe } from '../engine/audioContext';
 import { formatCompact, formatFixed } from '../engine/format';
 import { useEffect, useState, useRef } from 'react';
+import { NodeCard, NodeContent, ParamRow } from '../components';
 
 const METER_WIDTH = 20;
 const METER_HEIGHT = 60;
@@ -104,19 +105,18 @@ export function MeterNode({ id, selected }) {
   };
 
   return (
-    <div className={`audio-node meter ${selected ? 'selected' : ''}`}>
-      <div className="node-header">Meter</div>
-      <div className="node-content nodrag">
-        <div className="param-row">
+    <NodeCard type="meter" selected={selected} headerClassName="bg-orange-600 text-white">
+      <NodeContent>
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="input"
             className="handle inlet"
           />
-          <label>in</label>
+          <label className="w-6 text-gray-500 text-xs uppercase font-semibold">in</label>
 
-          <div className="meter-display" style={{ marginLeft: 'auto', position: 'relative' }} onDoubleClick={handleReset}>
+          <div className="relative ml-auto" onDoubleClick={handleReset}>
             <svg width={METER_WIDTH} height={METER_HEIGHT}>
               {/* Background */}
               <rect
@@ -148,23 +148,17 @@ export function MeterNode({ id, selected }) {
               )}
             </svg>
           </div>
+        </ParamRow>
+
+        <div className="flex justify-between text-xs font-mono mt-1">
+          <span className="text-blue-400">{formatCompact(histMinMax.min)}</span>
+          <span className="text-red-400">{formatCompact(histMinMax.max)}</span>
         </div>
 
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          fontSize: '9px',
-          fontFamily: 'monospace',
-          marginTop: '4px'
-        }}>
-          <span style={{ color: '#74b9ff' }}>{formatCompact(histMinMax.min)}</span>
-          <span style={{ color: '#ff7675' }}>{formatCompact(histMinMax.max)}</span>
-        </div>
-
-        <div className="meter-value" style={{ textAlign: 'center', fontSize: '9px', color: '#666', marginTop: '2px' }}>
+        <div className="text-center text-xs text-gray-600 mt-0.5">
           {formatFixed(20 * Math.log10(Math.max(0.0001, absLevel)), 1)} dB
         </div>
-      </div>
+      </NodeContent>
 
       <Handle
         type="source"
@@ -172,6 +166,6 @@ export function MeterNode({ id, selected }) {
         id="signal"
         className="handle outlet"
       />
-    </div>
+    </NodeCard>
   );
 }

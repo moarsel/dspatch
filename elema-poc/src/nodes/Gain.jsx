@@ -2,7 +2,7 @@
 import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
-import { formatFixed } from '../engine/format';
+import { NodeCard, NodeContent, ParamRow, RangeInput, ValueDisplay } from '../components';
 
 export const descriptor = {
   type: 'gain',
@@ -34,38 +34,36 @@ export function GainNode({ id, selected }) {
   const { data, updateParam } = useNodeData(id);
 
   return (
-    <div className={`audio-node gain ${selected ? 'selected' : ''}`}>
-      <div className="node-header">Gain</div>
-      <div className="node-content nodrag">
-        <div className="param-row">
+    <NodeCard type="gain" selected={selected} headerClassName="bg-cyan-400 text-gray-900">
+      <NodeContent>
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="input"
             className="handle inlet audio"
           />
-          <label>input</label>
-        </div>
+          <label className="w-16 text-gray-500 text-xs uppercase font-semibold">input</label>
+        </ParamRow>
 
-        <div className="param-row">
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="gain"
             className="handle inlet"
           />
-          <label>gain</label>
-          <input
-            type="range"
+          <RangeInput
+            label="gain"
             value={data.gain ?? 1}
             onChange={e => updateParam('gain', parseFloat(e.target.value))}
             min="0"
             max="2"
             step="0.01"
           />
-          <span className="value">{formatFixed(data.gain ?? 1, 2)}</span>
-        </div>
-      </div>
+          <ValueDisplay value={data.gain ?? 1} />
+        </ParamRow>
+      </NodeContent>
 
       <Handle
         type="source"
@@ -73,6 +71,6 @@ export function GainNode({ id, selected }) {
         id="signal"
         className="handle outlet"
       />
-    </div>
+    </NodeCard>
   );
 }

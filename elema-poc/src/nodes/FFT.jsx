@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
 import { subscribe, unsubscribe } from '../engine/audioContext';
 import { useEffect, useState, useRef } from 'react';
+import { NodeCard, NodeContent, ParamRow } from '../components';
 
 const FFT_WIDTH = 140;
 const FFT_HEIGHT = 60;
@@ -92,48 +93,45 @@ export function FFTNode({ id, selected }) {
   const barWidth = FFT_WIDTH / NUM_BINS;
 
   return (
-    <div className={`audio-node fft ${selected ? 'selected' : ''}`}>
-      <div className="node-header">FFT</div>
-      <div className="node-content nodrag">
-        <div className="param-row">
+    <NodeCard type="fft" selected={selected} headerClassName="bg-indigo-600 text-white">
+      <NodeContent>
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="input"
             className="handle inlet"
           />
-          <label>in</label>
-        </div>
+          <label className="w-6 text-gray-500 text-xs uppercase font-semibold">in</label>
+        </ParamRow>
 
-        <div className="fft-display">
-          <svg
-            width={FFT_WIDTH}
-            height={FFT_HEIGHT}
-            viewBox={`0 0 ${FFT_WIDTH} ${FFT_HEIGHT}`}
-          >
-            {/* Background */}
-            <rect x="0" y="0" width={FFT_WIDTH} height={FFT_HEIGHT} fill="#1a1a2e" />
+        <svg
+          width={FFT_WIDTH}
+          height={FFT_HEIGHT}
+          viewBox={`0 0 ${FFT_WIDTH} ${FFT_HEIGHT}`}
+        >
+          {/* Background */}
+          <rect x="0" y="0" width={FFT_WIDTH} height={FFT_HEIGHT} fill="#1a1a2e" />
 
-            {/* Frequency bars */}
-            {magnitudes.map((mag, i) => {
-              // Scale magnitude to height (log scale for better visualization)
-              const logMag = mag > 0 ? Math.log10(mag * 100 + 1) / 2 : 0;
-              const barHeight = Math.min(1, logMag) * FFT_HEIGHT;
+          {/* Frequency bars */}
+          {magnitudes.map((mag, i) => {
+            // Scale magnitude to height (log scale for better visualization)
+            const logMag = mag > 0 ? Math.log10(mag * 100 + 1) / 2 : 0;
+            const barHeight = Math.min(1, logMag) * FFT_HEIGHT;
 
-              return (
-                <rect
-                  key={i}
-                  x={i * barWidth}
-                  y={FFT_HEIGHT - barHeight}
-                  width={barWidth - 1}
-                  height={barHeight}
-                  fill="#6c5ce7"
-                />
-              );
-            })}
-          </svg>
-        </div>
-      </div>
+            return (
+              <rect
+                key={i}
+                x={i * barWidth}
+                y={FFT_HEIGHT - barHeight}
+                width={barWidth - 1}
+                height={barHeight}
+                fill="#6c5ce7"
+              />
+            );
+          })}
+        </svg>
+      </NodeContent>
 
       <Handle
         type="source"
@@ -141,6 +139,6 @@ export function FFTNode({ id, selected }) {
         id="signal"
         className="handle outlet"
       />
-    </div>
+    </NodeCard>
   );
 }

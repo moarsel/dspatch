@@ -3,7 +3,8 @@ import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
 import { subscribe, unsubscribe } from '../engine/audioContext';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
+import { NodeCard, NodeContent, ParamRow } from '../components';
 
 const NUM_STEPS = 8;
 const DEFAULT_STEPS = [1, 0, 1, 0, 1, 0, 1, 0];
@@ -90,39 +91,29 @@ export function SequencerNode({ id, selected }) {
   };
 
   return (
-    <div className={`audio-node sequencer ${selected ? 'selected' : ''}`}>
-      <div className="node-header">Seq</div>
-      <div className="node-content nodrag">
-        <div className="param-row">
+    <NodeCard type="sequencer" selected={selected} headerClassName="bg-indigo-400 text-gray-900">
+      <NodeContent>
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="trigger"
             className="handle inlet"
-            style={{ top: '40px' }}
           />
-          <label>trig</label>
-        </div>
+          <label className="w-8 text-gray-500 text-xs uppercase font-semibold">trig</label>
+        </ParamRow>
 
-        <div className="param-row">
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="reset"
             className="handle inlet"
-            style={{ top: '62px' }}
           />
-          <label>reset</label>
-        </div>
+          <label className="w-8 text-gray-500 text-xs uppercase font-semibold">reset</label>
+        </ParamRow>
 
-        <div style={{
-          display: 'flex',
-          gap: '3px',
-          marginTop: '8px',
-          padding: '4px',
-          background: '#1a1a2e',
-          borderRadius: '4px'
-        }}>
+        <div className="flex gap-0.5 mt-2 p-1 bg-gray-800 rounded">
           {steps.map((value, i) => {
             const isOn = value > 0.5;
             const isActive = currentStep === i;
@@ -130,46 +121,27 @@ export function SequencerNode({ id, selected }) {
               <button
                 key={i}
                 onClick={() => toggleStep(i)}
-                style={{
-                  width: '14px',
-                  height: '24px',
-                  border: 'none',
-                  borderRadius: '3px',
-                  cursor: 'pointer',
-                  padding: 0,
-                  background: isOn
-                    ? (isActive ? '#e84393' : '#667eea')
-                    : (isActive ? '#555' : '#2a2a3e'),
-                  boxShadow: isActive ? '0 0 6px rgba(232, 67, 147, 0.6)' : 'none',
-                  transition: 'background 0.05s'
-                }}
+                className={`w-3.5 h-6 border-0 rounded transition-colors ${
+                  isOn
+                    ? (isActive ? 'bg-pink-500 shadow-lg shadow-pink-500/60' : 'bg-indigo-500')
+                    : (isActive ? 'bg-gray-600 shadow-lg shadow-pink-500/60' : 'bg-gray-700')
+                }`}
               />
             );
           })}
         </div>
 
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          fontSize: '7px',
-          color: '#666',
-          marginTop: '2px',
-          padding: '0 4px'
-        }}>
+        <div className="flex justify-between text-xs text-gray-600 mt-0.5 px-1">
           {steps.map((_, i) => (
             <span
               key={i}
-              style={{
-                color: currentStep === i ? '#e84393' : '#666',
-                width: '14px',
-                textAlign: 'center'
-              }}
+              className={`w-3.5 text-center transition-colors ${currentStep === i ? 'text-pink-500' : ''}`}
             >
               {i + 1}
             </span>
           ))}
         </div>
-      </div>
+      </NodeContent>
 
       <Handle
         type="source"
@@ -177,6 +149,6 @@ export function SequencerNode({ id, selected }) {
         id="signal"
         className="handle outlet"
       />
-    </div>
+    </NodeCard>
   );
 }

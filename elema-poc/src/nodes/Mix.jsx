@@ -2,6 +2,7 @@
 import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
+import { NodeCard, NodeContent, ParamRow, RangeInput, ValueDisplay } from '../components';
 
 export const descriptor = {
   type: 'mix',
@@ -50,55 +51,53 @@ export const descriptor = {
 export function MixNode({ id, selected }) {
   const { data, updateParam } = useNodeData(id);
 
+  const balanceDisplay = data.balance === undefined || data.balance === 0.5
+    ? '50/50'
+    : data.balance < 0.5
+      ? `A ${Math.round((1 - data.balance) * 100)}%`
+      : `B ${Math.round(data.balance * 100)}%`;
+
   return (
-    <div className={`audio-node mix ${selected ? 'selected' : ''}`}>
-      <div className="node-header">Mix</div>
-      <div className="node-content nodrag">
-        <div className="param-row">
+    <NodeCard type="mix" selected={selected} headerClassName="bg-teal-500 text-gray-900">
+      <NodeContent>
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="a"
             className="handle inlet audio"
           />
-          <label>A</label>
-        </div>
+          <label className="w-6 text-gray-500 text-xs uppercase font-semibold">A</label>
+        </ParamRow>
 
-        <div className="param-row">
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="b"
             className="handle inlet audio"
           />
-          <label>B</label>
-        </div>
+          <label className="w-6 text-gray-500 text-xs uppercase font-semibold">B</label>
+        </ParamRow>
 
-        <div className="param-row">
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="balance"
             className="handle inlet"
           />
-          <label>bal</label>
-          <input
-            type="range"
+          <RangeInput
+            label="bal"
             value={data.balance ?? 0.5}
             onChange={e => updateParam('balance', parseFloat(e.target.value))}
             min="0"
             max="1"
             step="0.01"
           />
-          <span className="value">
-            {data.balance === undefined || data.balance === 0.5
-              ? '50/50'
-              : data.balance < 0.5
-                ? `A ${Math.round((1 - data.balance) * 100)}%`
-                : `B ${Math.round(data.balance * 100)}%`}
-          </span>
-        </div>
-      </div>
+          <ValueDisplay value={balanceDisplay} />
+        </ParamRow>
+      </NodeContent>
 
       <Handle
         type="source"
@@ -106,6 +105,6 @@ export function MixNode({ id, selected }) {
         id="signal"
         className="handle outlet"
       />
-    </div>
+    </NodeCard>
   );
 }

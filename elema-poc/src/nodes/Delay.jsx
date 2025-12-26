@@ -3,6 +3,7 @@ import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
 import { formatFixed } from '../engine/format';
+import { NodeCard, NodeContent, ParamRow, RangeInput, ValueDisplay } from '../components';
 
 export const descriptor = {
   type: 'delay',
@@ -55,76 +56,76 @@ export function DelayNode({ id, selected }) {
   const { data, updateParam } = useNodeData(id);
 
   return (
-    <div className={`audio-node delay ${selected ? 'selected' : ''}`}>
-      <div className="node-header">Delay</div>
-      <div className="node-content nodrag">
-        <div className="param-row">
+    <NodeCard type="delay" selected={selected} headerClassName="bg-purple-600 text-white">
+      <NodeContent>
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="input"
             className="handle inlet audio"
+            style={{ top: '40px' }}
           />
-          <label>input</label>
-        </div>
+          <label className="w-16 text-gray-500 text-xs uppercase font-semibold">input</label>
+        </ParamRow>
 
-        <div className="param-row">
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="time"
             className="handle inlet"
+            style={{ top: '68px' }}
           />
-          <label>time</label>
-          <input
-            type="range"
+          <RangeInput
+            label="time"
             value={data.time ?? 250}
             onChange={e => updateParam('time', parseFloat(e.target.value))}
             min="1"
             max="2000"
             step="1"
           />
-          <span className="value">{Math.round(data.time ?? 250)}ms</span>
-        </div>
+          <ValueDisplay value={`${Math.round(data.time ?? 250)}ms`} />
+        </ParamRow>
 
-        <div className="param-row">
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="feedback"
             className="handle inlet"
+            style={{ top: '96px' }}
           />
-          <label>fb</label>
-          <input
-            type="range"
+          <RangeInput
+            label="fb"
             value={data.feedback ?? 0.3}
             onChange={e => updateParam('feedback', parseFloat(e.target.value))}
             min="0"
             max="0.95"
             step="0.01"
           />
-          <span className="value">{formatFixed(data.feedback ?? 0.3, 2)}</span>
-        </div>
+          <ValueDisplay value={data.feedback ?? 0.3} />
+        </ParamRow>
 
-        <div className="param-row">
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="mix"
             className="handle inlet"
+            style={{ top: '124px' }}
           />
-          <label>mix</label>
-          <input
-            type="range"
+          <RangeInput
+            label="mix"
             value={data.mix ?? 0.5}
             onChange={e => updateParam('mix', parseFloat(e.target.value))}
             min="0"
             max="1"
             step="0.01"
           />
-          <span className="value">{formatFixed(data.mix ?? 0.5, 2)}</span>
-        </div>
-      </div>
+          <ValueDisplay value={data.mix ?? 0.5} />
+        </ParamRow>
+      </NodeContent>
 
       <Handle
         type="source"
@@ -132,6 +133,6 @@ export function DelayNode({ id, selected }) {
         id="signal"
         className="handle outlet"
       />
-    </div>
+    </NodeCard>
   );
 }

@@ -2,6 +2,7 @@
 import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
+import { NodeCard, NodeContent, ParamRow } from '../components';
 
 export const descriptor = {
   type: 'output',
@@ -37,29 +38,28 @@ export function OutputNode({ id, selected }) {
   const { data, updateParam } = useNodeData(id);
 
   return (
-    <div className={`audio-node output ${selected ? 'selected' : ''}`}>
-      <div className="node-header">Output</div>
-      <div className="node-content nodrag">
-        <div className="param-row">
+    <NodeCard type="output" selected={selected} headerClassName="bg-green-500 text-gray-900">
+      <NodeContent>
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="left"
             className="handle inlet audio"
           />
-          <label>L</label>
-        </div>
+          <label className="w-12 text-gray-500 text-xs uppercase font-semibold">L</label>
+        </ParamRow>
 
-        <div className="param-row">
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="right"
             className="handle inlet audio"
           />
-          <label>R</label>
-        </div>
-      </div>
-    </div>
+          <label className="w-12 text-gray-500 text-xs uppercase font-semibold">R</label>
+        </ParamRow>
+      </NodeContent>
+    </NodeCard>
   );
 }

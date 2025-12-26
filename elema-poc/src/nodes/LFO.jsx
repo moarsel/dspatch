@@ -3,6 +3,7 @@ import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
 import { formatFixed } from '../engine/format';
+import { NodeCard, NodeContent, ParamRow, RangeInput, SelectInput, ValueDisplay } from '../components';
 
 export const descriptor = {
   type: 'lfo',
@@ -44,60 +45,58 @@ export function LFONode({ id, selected }) {
   const { data, updateParam } = useNodeData(id);
 
   return (
-    <div className={`audio-node lfo ${selected ? 'selected' : ''}`}>
-      <div className="node-header">LFO</div>
-      <div className="node-content nodrag">
-        <div className="param-row">
+    <NodeCard type="lfo" selected={selected} headerClassName="bg-pink-400 text-gray-900">
+      <NodeContent>
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="rate"
             className="handle inlet"
           />
-          <label>rate</label>
-          <input
-            type="range"
+          <RangeInput
+            label="rate"
             value={data.rate ?? 1}
             onChange={e => updateParam('rate', parseFloat(e.target.value))}
             min="0.1"
             max="20"
             step="0.1"
           />
-          <span className="value">{formatFixed(data.rate ?? 1, 1)}Hz</span>
-        </div>
+          <ValueDisplay value={`${formatFixed(data.rate ?? 1, 1)}Hz`} />
+        </ParamRow>
 
-        <div className="param-row">
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="depth"
             className="handle inlet"
           />
-          <label>depth</label>
-          <input
-            type="range"
+          <RangeInput
+            label="depth"
             value={data.depth ?? 1}
             onChange={e => updateParam('depth', parseFloat(e.target.value))}
             min="0"
             max="1"
             step="0.01"
           />
-          <span className="value">{formatFixed(data.depth ?? 1, 2)}</span>
-        </div>
+          <ValueDisplay value={data.depth ?? 1} />
+        </ParamRow>
 
-        <div className="param-row">
-          <label>wave</label>
-          <select
+        <ParamRow>
+          <SelectInput
+            label="wave"
             value={data.waveform ?? 'sine'}
             onChange={e => updateParam('waveform', e.target.value)}
-          >
-            <option value="sine">Sine</option>
-            <option value="saw">Saw</option>
-            <option value="square">Square</option>
-            <option value="triangle">Triangle</option>
-          </select>
-        </div>
-      </div>
+            options={[
+              { value: 'sine', label: 'Sine' },
+              { value: 'saw', label: 'Saw' },
+              { value: 'square', label: 'Square' },
+              { value: 'triangle', label: 'Triangle' },
+            ]}
+          />
+        </ParamRow>
+      </NodeContent>
 
       <Handle
         type="source"
@@ -105,6 +104,6 @@ export function LFONode({ id, selected }) {
         id="signal"
         className="handle outlet"
       />
-    </div>
+    </NodeCard>
   );
 }

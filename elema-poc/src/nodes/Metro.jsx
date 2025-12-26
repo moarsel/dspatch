@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
 import { useSignalHigh } from '../engine/useSignalValue';
 import { formatFixed } from '../engine/format';
+import { NodeCard, NodeContent, ParamRow, NumberInput } from '../components';
 
 export const descriptor = {
   type: 'metro',
@@ -31,49 +32,34 @@ export function MetroNode({ id, selected }) {
   const isActive = useSignalHigh(id);
 
   return (
-    <div className={`audio-node metro ${selected ? 'selected' : ''}`}>
-      <div className="node-header">Metro</div>
-      <div className="node-content nodrag">
-        <div className="param-row">
+    <NodeCard type="metro" selected={selected} headerClassName="bg-orange-300 text-gray-900">
+      <NodeContent>
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="bpm"
             className="handle inlet"
           />
-          <label>bpm</label>
-          <input
-            type="number"
+          <NumberInput
+            label="bpm"
             value={bpm}
             onChange={e => updateParam('bpm', parseFloat(e.target.value) || 120)}
             min="1"
             max="999"
             step="1"
-            style={{ width: '50px' }}
           />
           <div
-            style={{
-              width: '12px',
-              height: '12px',
-              borderRadius: '50%',
-              background: isActive ? '#e84393' : '#333',
-              marginLeft: '8px',
-              boxShadow: isActive ? '0 0 8px #e84393' : 'none',
-              transition: 'background 0.05s, box-shadow 0.05s'
-            }}
+            className={`w-3 h-3 rounded-full transition-all ${
+              isActive ? 'bg-pink-500 shadow-lg shadow-pink-500/50' : 'bg-gray-700'
+            }`}
           />
-        </div>
+        </ParamRow>
 
-        <div style={{
-          textAlign: 'right',
-          fontSize: '9px',
-          fontFamily: 'monospace',
-          color: '#666',
-          marginTop: '2px'
-        }}>
+        <div className="text-right text-xs font-mono text-gray-600 mt-0.5">
           {formatFixed(hz, 2)} Hz
         </div>
-      </div>
+      </NodeContent>
 
       <Handle
         type="source"
@@ -81,6 +67,6 @@ export function MetroNode({ id, selected }) {
         id="signal"
         className="handle outlet"
       />
-    </div>
+    </NodeCard>
   );
 }

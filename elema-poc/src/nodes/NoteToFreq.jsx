@@ -3,6 +3,7 @@ import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
 import { formatFixed } from '../engine/format';
+import { NodeCard, NodeContent, ParamRow, NumberInput, SelectInput, ValueDisplay } from '../components';
 
 // Note names for the GUI selector
 const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
@@ -58,63 +59,51 @@ export function NoteToFreqNode({ id, selected }) {
   const { data, updateParam } = useNodeData(id);
   const currentNote = data.note ?? 60;
   const currentFreq = midiToFreq(currentNote);
-
-  // Generate octave options (0-8)
   const octaves = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
   return (
-    <div className={`audio-node notetofreq ${selected ? 'selected' : ''}`}>
-      <div className="node-header">Note to Freq</div>
-      <div className="node-content nodrag">
-        <div className="param-row">
+    <NodeCard type="notetofreq" selected={selected} headerClassName="bg-blue-400 text-gray-900">
+      <NodeContent>
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="note"
             className="handle inlet"
           />
-          <label>note</label>
-          <select
+          <SelectInput
+            label="note"
             value={NOTE_NAMES[currentNote % 12]}
             onChange={e => {
               const noteIndex = NOTE_NAMES.indexOf(e.target.value);
               const octave = Math.floor(currentNote / 12);
               updateParam('note', octave * 12 + noteIndex);
             }}
-            style={{ width: '50px' }}
-          >
-            {NOTE_NAMES.map(n => (
-              <option key={n} value={n}>{n}</option>
-            ))}
-          </select>
-          <select
+            options={NOTE_NAMES.map(n => ({ value: n, label: n }))}
+          />
+          <SelectInput
+            label=""
             value={Math.floor(currentNote / 12) - 1}
             onChange={e => {
               const octave = parseInt(e.target.value) + 1;
               const noteIndex = currentNote % 12;
               updateParam('note', octave * 12 + noteIndex);
             }}
-            style={{ width: '40px' }}
-          >
-            {octaves.map(o => (
-              <option key={o} value={o}>{o}</option>
-            ))}
-          </select>
-        </div>
+            options={octaves.map(o => ({ value: o.toString(), label: o.toString() }))}
+          />
+        </ParamRow>
 
-        <div className="param-row">
-          <label>midi</label>
-          <input
-            type="number"
+        <ParamRow>
+          <NumberInput
+            label="midi"
             value={currentNote}
             onChange={e => updateParam('note', Math.max(0, Math.min(127, parseInt(e.target.value) || 0)))}
             min="0"
             max="127"
-            style={{ width: '50px' }}
           />
-          <span className="value">{formatFixed(currentFreq, 1)}Hz</span>
-        </div>
-      </div>
+          <ValueDisplay value={`${formatFixed(currentFreq, 1)}Hz`} />
+        </ParamRow>
+      </NodeContent>
 
       <Handle
         type="source"
@@ -122,6 +111,6 @@ export function NoteToFreqNode({ id, selected }) {
         id="frequency"
         className="handle outlet"
       />
-    </div>
+    </NodeCard>
   );
 }

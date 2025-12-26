@@ -3,6 +3,7 @@ import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
 import { useSignalValue } from '../engine/useSignalValue';
+import { NodeCard, NodeContent, ParamRow, ValueDisplay } from '../components';
 
 export const descriptor = {
   type: 'number',
@@ -24,10 +25,9 @@ export function NumberNode({ id, selected }) {
   const inputValue = data.value ?? 0;
 
   return (
-    <div className={`audio-node number ${selected ? 'selected' : ''}`}>
-      <div className="node-header">Number</div>
-      <div className="node-content nodrag">
-        <div className="param-row">
+    <NodeCard type="number" selected={selected} headerClassName="bg-gray-600 text-white">
+      <NodeContent>
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
@@ -39,18 +39,13 @@ export function NumberNode({ id, selected }) {
             value={inputValue}
             onChange={e => updateParam('value', parseFloat(e.target.value) || 0)}
             step="any"
-            style={{ width: '60px', textAlign: 'center' }}
+            className="w-16 px-1.5 py-1 bg-gray-800 text-white border border-gray-700 rounded text-xs text-center focus:outline-none focus:border-purple-500"
           />
-          <span style={{
-            fontSize: '10px',
-            fontFamily: 'monospace',
-            color: '#81ecec',
-            marginLeft: '4px'
-          }}>
+          <span className="text-xs font-mono text-cyan-400 ml-1">
             {display}
           </span>
-        </div>
-      </div>
+        </ParamRow>
+      </NodeContent>
 
       <Handle
         type="source"
@@ -58,6 +53,6 @@ export function NumberNode({ id, selected }) {
         id="signal"
         className="handle outlet"
       />
-    </div>
+    </NodeCard>
   );
 }

@@ -3,6 +3,7 @@ import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
 import { formatFixed } from '../engine/format';
+import { NodeCard, NodeContent, ParamRow, RangeInput, SelectInput, ValueDisplay } from '../components';
 
 export const descriptor = {
   type: 'filter',
@@ -40,69 +41,67 @@ export function FilterNode({ id, selected }) {
   const { data, updateParam } = useNodeData(id);
 
   return (
-    <div className={`audio-node filter ${selected ? 'selected' : ''}`}>
-      <div className="node-header">Filter</div>
-      <div className="node-content nodrag">
-        <div className="param-row">
+    <NodeCard type="filter" selected={selected} headerClassName="bg-blue-500 text-white">
+      <NodeContent>
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="input"
             className="handle inlet audio"
           />
-          <label>input</label>
-        </div>
+          <label className="w-16 text-gray-500 text-xs uppercase font-semibold">input</label>
+        </ParamRow>
 
-        <div className="param-row">
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="cutoff"
             className="handle inlet"
           />
-          <label>cutoff</label>
-          <input
-            type="range"
+          <RangeInput
+            label="cut"
             value={data.cutoff ?? 1000}
             onChange={e => updateParam('cutoff', parseFloat(e.target.value))}
             min="20"
             max="20000"
             step="1"
           />
-          <span className="value">{Math.round(data.cutoff ?? 1000)}Hz</span>
-        </div>
+          <ValueDisplay value={`${Math.round(data.cutoff ?? 1000)}Hz`} />
+        </ParamRow>
 
-        <div className="param-row">
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="q"
             className="handle inlet"
           />
-          <label>Q</label>
-          <input
-            type="range"
+          <RangeInput
+            label="Q"
             value={data.q ?? 1}
             onChange={e => updateParam('q', parseFloat(e.target.value))}
             min="0.1"
             max="20"
             step="0.1"
           />
-          <span className="value">{formatFixed(data.q ?? 1, 1)}</span>
-        </div>
+          <ValueDisplay value={data.q ?? 1} />
+        </ParamRow>
 
-        <div className="param-row">
-          <label>type</label>
-          <select
+        <ParamRow>
+          <SelectInput
+            label="type"
             value={data.filterType ?? 'lowpass'}
             onChange={e => updateParam('filterType', e.target.value)}
-          >
-            <option value="lowpass">Lowpass</option>
-            <option value="highpass">Highpass</option>
-            <option value="bandpass">Bandpass</option>
-          </select>
-        </div>
-      </div>
+            options={[
+              { value: 'lowpass', label: 'Low' },
+              { value: 'highpass', label: 'High' },
+              { value: 'bandpass', label: 'Band' },
+            ]}
+          />
+        </ParamRow>
+      </NodeContent>
 
       <Handle
         type="source"
@@ -110,6 +109,6 @@ export function FilterNode({ id, selected }) {
         id="signal"
         className="handle outlet"
       />
-    </div>
+    </NodeCard>
   );
 }

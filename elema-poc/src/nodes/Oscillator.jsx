@@ -2,7 +2,7 @@
 import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
-import { formatFixed } from '../engine/format';
+import { NodeCard, NodeContent, ParamRow, NumberInput, RangeInput, SelectInput, ValueDisplay } from '../components';
 
 export const descriptor = {
   type: 'oscillator',
@@ -43,59 +43,57 @@ export function OscillatorNode({ id, selected }) {
   const { data, updateParam } = useNodeData(id);
 
   return (
-    <div className={`audio-node oscillator ${selected ? 'selected' : ''}`}>
-      <div className="node-header">Oscillator</div>
-      <div className="node-content nodrag">
-        <div className="param-row">
+    <NodeCard type="oscillator" selected={selected} headerClassName="bg-red-500 text-white">
+      <NodeContent>
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="frequency"
             className="handle inlet"
           />
-          <label>freq</label>
-          <input
-            type="number"
+          <NumberInput
+            label="freq"
             value={data.frequency ?? 440}
             onChange={e => updateParam('frequency', parseFloat(e.target.value) || 440)}
             min="20"
             max="20000"
             step="1"
           />
-        </div>
+        </ParamRow>
 
-        <div className="param-row">
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="gain"
             className="handle inlet"
           />
-          <label>gain</label>
-          <input
-            type="range"
+          <RangeInput
+            label="gain"
             value={data.gain ?? 0.5}
             onChange={e => updateParam('gain', parseFloat(e.target.value))}
             min="0"
             max="1"
             step="0.01"
           />
-          <span className="value">{formatFixed(data.gain ?? 0.5, 2)}</span>
-        </div>
+          <ValueDisplay value={data.gain ?? 0.5} />
+        </ParamRow>
 
-        <div className="param-row">
-          <label>wave</label>
-          <select
+        <ParamRow>
+          <SelectInput
+            label="wave"
             value={data.waveform ?? 'sine'}
             onChange={e => updateParam('waveform', e.target.value)}
-          >
-            <option value="sine">Sine</option>
-            <option value="saw">Saw</option>
-            <option value="square">Square</option>
-            <option value="triangle">Triangle</option>
-          </select>
-        </div>
-      </div>
+            options={[
+              { value: 'sine', label: 'Sine' },
+              { value: 'saw', label: 'Saw' },
+              { value: 'square', label: 'Square' },
+              { value: 'triangle', label: 'Triangle' },
+            ]}
+          />
+        </ParamRow>
+      </NodeContent>
 
       <Handle
         type="source"
@@ -103,6 +101,6 @@ export function OscillatorNode({ id, selected }) {
         id="signal"
         className="handle outlet"
       />
-    </div>
+    </NodeCard>
   );
 }

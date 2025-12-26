@@ -3,6 +3,7 @@ import { el } from '@elemaudio/core';
 import { Handle, Position } from 'reactflow';
 import { useNodeData } from '../engine/useGraph';
 import { useSignalValue } from '../engine/useSignalValue';
+import { NodeCard, NodeContent, ParamRow, NumberInput, SelectInput } from '../components';
 
 const OPERATIONS = {
   add: { symbol: '+', fn: (a, b) => el.add(a, b) },
@@ -41,71 +42,54 @@ export function MathNode({ id, selected }) {
   const operation = data.operation ?? 'add';
 
   return (
-    <div className={`audio-node math ${selected ? 'selected' : ''}`}>
-      <div className="node-header">Math</div>
-      <div className="node-content nodrag">
-        <div className="param-row">
+    <NodeCard type="math" selected={selected} headerClassName="bg-gray-400 text-gray-900">
+      <NodeContent>
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="a"
             className="handle inlet"
           />
-          <label>A</label>
-          <input
-            type="number"
+          <NumberInput
+            label="A"
             value={data.a ?? 0}
             onChange={e => updateParam('a', parseFloat(e.target.value) || 0)}
             step="any"
-            style={{ width: '60px' }}
           />
-        </div>
+        </ParamRow>
 
-        <div className="param-row">
+        <ParamRow>
           <Handle
             type="target"
             position={Position.Left}
             id="b"
             className="handle inlet"
           />
-          <label>B</label>
-          <input
-            type="number"
+          <NumberInput
+            label="B"
             value={data.b ?? 0}
             onChange={e => updateParam('b', parseFloat(e.target.value) || 0)}
             step="any"
-            style={{ width: '60px' }}
           />
-        </div>
+        </ParamRow>
 
-        <div className="param-row">
-          <label>op</label>
-          <select
+        <ParamRow>
+          <SelectInput
+            label="op"
             value={operation}
             onChange={e => updateParam('operation', e.target.value)}
-          >
-            {Object.entries(OPERATIONS).map(([key, { symbol }]) => (
-              <option key={key} value={key}>
-                {symbol} ({key})
-              </option>
-            ))}
-          </select>
-        </div>
+            options={Object.entries(OPERATIONS).map(([key, { symbol }]) => ({
+              value: key,
+              label: `${symbol} (${key})`
+            }))}
+          />
+        </ParamRow>
 
-        <div style={{
-          textAlign: 'center',
-          fontSize: '12px',
-          fontFamily: 'monospace',
-          fontWeight: 'bold',
-          color: '#81ecec',
-          marginTop: '4px',
-          padding: '4px',
-          background: '#1a1a2e',
-          borderRadius: '4px'
-        }}>
+        <div className="text-center text-xs font-mono font-bold text-cyan-400 mt-1 p-1 bg-gray-950 rounded">
           = {display}
         </div>
-      </div>
+      </NodeContent>
 
       <Handle
         type="source"
@@ -113,6 +97,6 @@ export function MathNode({ id, selected }) {
         id="signal"
         className="handle outlet"
       />
-    </div>
+    </NodeCard>
   );
 }

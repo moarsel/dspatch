@@ -7,6 +7,7 @@ import './App.css';
 import { useGraph } from './engine/useGraph';
 import { initAudio } from './engine/audioContext';
 import { nodeTypes, availableNodes } from './nodes';
+import { Sidebar, SidebarHeader, NodePalette } from './components';
 
 function App() {
   const [audioStarted, setAudioStarted] = useState(false);
@@ -70,21 +71,10 @@ function App() {
       )}
 
       {/* Sidebar */}
-      <div className="sidebar">
-        <h2>Nodes</h2>
-        <div className="node-list">
-          {availableNodes.map(type => (
-            <div
-              key={type}
-              className={`sidebar-node ${type}`}
-              draggable
-              onDragStart={(e) => onDragStart(e, type)}
-            >
-              {type}
-            </div>
-          ))}
-        </div>
-      </div>
+      <Sidebar>
+        <SidebarHeader>Nodes</SidebarHeader>
+        <NodePalette nodes={availableNodes} />
+      </Sidebar>
 
       {/* React Flow Canvas */}
       <div className="canvas">
