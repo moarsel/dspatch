@@ -49,10 +49,10 @@ export function AppSidebar({ availableNodes }: AppSidebarProps) {
       collapsible="offcanvas"
     >
       <SidebarHeader className="px-4 py-3 flex flex-row items-center justify-between">
-        <h2 className="text-[10px] uppercase tracking-[0.15em] font-semibold text-sidebar-foreground/50">
+        <h2 className="text-sm uppercase font-semibold text-sidebar-foreground/50">
           Nodes
         </h2>
-        <SidebarTrigger className="h-6 w-6" />
+        <SidebarTrigger/>
       </SidebarHeader>
       <SidebarContent className="px-2">
         {Object.entries(categories).map(([category, categoryNodes]) => {
@@ -61,7 +61,7 @@ export function AppSidebar({ availableNodes }: AppSidebarProps) {
 
           return (
             <SidebarGroup key={category} className="py-2">
-              <div className={`text-[11px] uppercase tracking-wide text-sidebar-foreground/60 font-medium border-l-2 ${categoryAccents[category]} pl-2 mb-1`}>
+              <div className={`text-[11px] uppercase tracking-wide text-sidebar-foreground/60 font-bold border-l-2 ${categoryAccents[category]} pl-2 mb-1`}>
                 {category}
               </div>
               <SidebarGroupContent>
@@ -74,7 +74,7 @@ export function AppSidebar({ availableNodes }: AppSidebarProps) {
                         className="cursor-grab active:cursor-grabbing h-7 rounded-md"
                         onDragStart={(e) => handleDragStart(e, nodeType)}
                       >
-                        <span className="capitalize text-[13px]">{nodeType}</span>
+                        <span className="text-[13px]">{nodeType}</span>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   ))}
@@ -96,7 +96,7 @@ export function SidebarToggle() {
 
   return (
     <SidebarTrigger
-      className="fixed top-3 left-3 z-50 h-8 w-8 bg-sidebar border border-sidebar-border rounded-md shadow-md hover:bg-sidebar-accent transition-all duration-200"
+      className="fixed top-3 left-3 z-50 h-10 w-10 bg-sidebar border border-sidebar-border rounded-md shadow-md hover:bg-sidebar-accent transition-all duration-200"
     />
   )
 }
