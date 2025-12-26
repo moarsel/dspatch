@@ -17,7 +17,6 @@ Visual programming for audio synthesis.
 - drag to select edges
 - copy / paste
 - undo / redo
-- collapsable side panel, move to right side. collapsible category menus. type to filter? see shadcn sidebar 
 - help tooltips?
 
 ## Features
