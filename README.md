@@ -5,7 +5,8 @@ Visual programming for audio synthesis.
 
 ## UI
 
-- edge displays active/inactive signal chain. 
+- more excellent ui, subtle intetgration of some bold skeumorphism in key areas that create joy and resonance. e.g. output should have a speaker grill, scope should looke like an oscilloscope. inspired by jhey: https://codepen.io/jh3y/pen/WbQNxXb https://codepen.io/jh3y/pens/popular
+- edge displays active/inactive signal chain. subtle number animations. nice feeling toggles
     - active signal shows value number circle in middle
         - https://reactflow.dev/ui/components/data-edge
     - line itself is an animate scope?
@@ -16,12 +17,13 @@ Visual programming for audio synthesis.
 - drag to select edges
 - copy / paste
 - undo / redo
-- collapsable side panel, move to right side. collapsible category menus. type to filter? command+k?
+- collapsable side panel, move to right side. collapsible category menus. type to filter? see shadcn sidebar 
 - help tooltips?
 
 ## Features
 - load/save patches
-- built in patch explorer (+ educational like PD had)
+- built in patch explorer (+ educational like PD had). large top title bar changes depending on selection, vertical tabs below on left.
+    - welcome splash screen (keep required click functionality)
     - getting started
     - basic synthesis
     - sequencer / sampler
