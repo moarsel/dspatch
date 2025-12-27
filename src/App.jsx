@@ -7,6 +7,7 @@ import './App.css';
 import { useGraph } from './engine/useGraph';
 import { initAudio } from './engine/audioContext';
 import { nodeTypes, availableNodes } from './nodes';
+import { edgeTypes } from './edges';
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import { AppSidebar, SidebarToggle } from '@/components/AppSidebar';
 
@@ -103,12 +104,12 @@ function AppContent() {
             onDrop={onDrop}
             onDragOver={onDragOver}
             nodeTypes={nodeTypes}
-            fitView
+            edgeTypes={edgeTypes}
             snapToGrid
             snapGrid={[15, 15]}
+            defaultViewport={{x: 100, y: 100, zoom: 0.7 }}
             defaultEdgeOptions={{
-              type: 'smoothstep',
-              animated: true,
+              type: 'signal',
             }}
           >
             <Background variant="dots" gap={15} size={1} />

@@ -13,7 +13,6 @@ Visual programming for audio synthesis.
     - animate along path: https://reactflow.dev/ui/components/animated-svg-edge
         - https://reactflow.dev/examples/edges/animating-edges
         https://github.com/xyflow/xyflow/blob/main/packages/system/src/utils/edges/bezier-edge.ts/ 
-- visualize filled vs unfilled inlets. validate inlet additions
 - drag to select edges
 - copy / paste
 - undo / redo

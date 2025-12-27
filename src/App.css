@@ -189,6 +189,15 @@ body {
   }
 }
 
+/* Signal edge waveform chunks */
+.signal-edge-chunk {
+  pointer-events: none;
+}
+
+.signal-edge-chunk path {
+  filter: drop-shadow(0 0 2px rgba(178, 125, 18, 0.5));
+}
+
 /* MiniMap - Subtle */
 .react-flow__minimap {
   background: #2c2c2e !important;

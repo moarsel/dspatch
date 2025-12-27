@@ -142,5 +142,19 @@ export function compileGraph(nodes, edges, registry) {
     }
   }
 
+  // Add edge meters at zero gain for visualization
+  for (const edge of edges) {
+    const sourceOutputs = compiled.get(edge.source);
+    if (sourceOutputs && sourceOutputs[edge.sourceHandle] !== undefined) {
+      const signal = sourceOutputs[edge.sourceHandle];
+      if (typeof signal === 'object' && signal !== null) {
+        const meterId = edge.id;
+        const edgeMeter = el.meter({ name: meterId }, signal);
+        const silent = el.mul(el.const({ key: `${meterId}:z`, value: 0 }), edgeMeter);
+        left = el.add(left, silent);
+      }
+    }
+  }
+
   return { left, right };
 }
