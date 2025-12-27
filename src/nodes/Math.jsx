@@ -1,9 +1,9 @@
 // Math.jsx - Mathematical operations node
 import { el } from '@elemaudio/core';
-import { Handle, Position } from 'reactflow';
+import { Handle, Position } from '@xyflow/react';
 import { useNodeData } from '../engine/useGraph';
 import { useSignalValue } from '../engine/useSignalValue';
-import { NodeCard, NodeContent, ParamRow, NumberInput, SelectInput } from '../components';
+import { NodeCard, NodeContent, ParamRow, NumberInput, SelectInput, InletHandle } from '../components';
 
 const OPERATIONS = {
   add: { symbol: '+', fn: (a, b) => el.add(a, b) },
@@ -45,12 +45,7 @@ export function MathNode({ id, selected }) {
     <NodeCard type="math" selected={selected} headerClassName="bg-gray-400 ">
       <NodeContent>
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="a"
-            className="handle inlet"
-          />
+          <InletHandle id="a" />
           <NumberInput
             label="A"
             value={data.a ?? 0}
@@ -60,12 +55,7 @@ export function MathNode({ id, selected }) {
         </ParamRow>
 
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="b"
-            className="handle inlet"
-          />
+          <InletHandle id="b" />
           <NumberInput
             label="B"
             value={data.b ?? 0}

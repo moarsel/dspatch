@@ -1,9 +1,8 @@
 // Delay.jsx - Simple delay effect with feedback
 import { el } from '@elemaudio/core';
-import { Handle, Position } from 'reactflow';
+import { Handle, Position } from '@xyflow/react';
 import { useNodeData } from '../engine/useGraph';
-import { formatFixed } from '../engine/format';
-import { NodeCard, NodeContent, ParamRow, RangeInput, ValueDisplay } from '../components';
+import { NodeCard, NodeContent, ParamRow, RangeInput, ValueDisplay, InletHandle } from '../components';
 
 export const descriptor = {
   type: 'delay',
@@ -59,22 +58,12 @@ export function DelayNode({ id, selected }) {
     <NodeCard type="delay" selected={selected} headerClassName="bg-purple-600 text-white">
       <NodeContent>
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="input"
-            className="handle inlet"
-          />
+          <InletHandle id="input" />
           <label className="w-16 text-gray-500 text-xs uppercase font-semibold">input</label>
         </ParamRow>
 
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="time"
-            className="handle inlet"
-          />
+          <InletHandle id="time" />
           <RangeInput
             label="time"
             value={data.time ?? 250}
@@ -87,12 +76,7 @@ export function DelayNode({ id, selected }) {
         </ParamRow>
 
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="feedback"
-            className="handle inlet"
-          />
+          <InletHandle id="feedback" />
           <RangeInput
             label="fb"
             value={data.feedback ?? 0.3}
@@ -105,12 +89,7 @@ export function DelayNode({ id, selected }) {
         </ParamRow>
 
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="mix"
-            className="handle inlet"
-          />
+          <InletHandle id="mix" />
           <RangeInput
             label="mix"
             value={data.mix ?? 0.5}

@@ -1,10 +1,10 @@
 // Output.jsx - DAC output node (stereo) with integrated level meter
 import { el } from '@elemaudio/core';
-import { Handle, Position } from 'reactflow';
+import { Handle, Position } from '@xyflow/react';
 import { useNodeData } from '../engine/useGraph';
 import { subscribe, unsubscribe } from '../engine/audioContext';
 import { useEffect, useState } from 'react';
-import { NodeCard, NodeContent, ParamRow } from '../components';
+import { NodeCard, NodeContent, ParamRow, InletHandle } from '../components';
 
 export const descriptor = {
   type: 'output',
@@ -87,23 +87,13 @@ export function OutputNode({ id, selected }) {
       <NodeContent>
         <div className="flex flex-col gap-1.5">
           <ParamRow>
-            <Handle
-              type="target"
-              position={Position.Left}
-              id="left"
-              className="handle inlet"
-            />
+            <InletHandle id="left" />
             <label className="w-4 text-gray-400 text-xxs uppercase font-medium">L</label>
             <HorizontalMeter level={levelL} />
           </ParamRow>
 
           <ParamRow>
-            <Handle
-              type="target"
-              position={Position.Left}
-              id="right"
-              className="handle inlet"
-            />
+            <InletHandle id="right" />
             <label className="w-4 text-gray-400 text-xxs uppercase font-medium">R</label>
             <HorizontalMeter level={levelR} />
           </ParamRow>

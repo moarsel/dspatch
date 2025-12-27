@@ -98,8 +98,8 @@ body {
 
 /* Handles */
 .handle {
-  width: 18px !important;
-  height: 18px !important;
+  width: 24px !important;
+  height: 24px !important;
   border: 2px solid #48484a !important;
   background: #0b0b0b !important;
   transition: all 0.15s ease;
@@ -115,8 +115,24 @@ body {
   cursor: grabbing;
 }
 
+/* Visual indicator for handle being connected */
+.handle.connecting,
+.handle.connectingto,
+.handle.connectingfrom,
+.react-flow__handle.connecting {
+  background: #ff6b35 !important;
+  border-color: #ff6b35 !important;
+  box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.3);
+  animation: pulse-handle 1s ease-in-out infinite;
+}
+
+@keyframes pulse-handle {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.3); }
+  50% { box-shadow: 0 0 0 8px rgba(255, 107, 53, 0.15); }
+}
+
 .handle.inlet {
-  left: -26px !important;
+  left: -16px !important;
 }
 
 .handle.inlet:hover {
@@ -124,14 +140,30 @@ body {
   border-color: #516fe5 !important;
 }
 
+/* Connected inlet - filled appearance matching outlet colors */
+.handle.inlet.connected {
+  background: #48484a !important;
+  border-width: 4px;
+  border-color: #0b0b0b !important;
+}
+
+/* Rejection style - trying to connect to an already-connected inlet */
+.handle.inlet.connected.connecting,
+.handle.inlet.connected.connectingto {
+  background: #8b2020 !important;
+  border-color: #ff4444 !important;
+  box-shadow: 0 0 0 4px rgba(255, 68, 68, 0.3);
+  cursor: not-allowed;
+}
+
 
 .handle.outlet {
-  right: -9px !important;
+  right: 0px !important;
   background: #48484a !important;
   border-color: #0b0b0b !important;
 }
 
-.handle.outlet:hover {
+.handle.outlet:hover, .handle.outlet:focus {
   background: #ff8c5a !important;
   border-color: #c24915 !important;
 }
@@ -188,4 +220,26 @@ body {
 /* Background dots */
 .react-flow__background {
   background: #1c1c1e !important;
+}
+
+
+/* Larger touch targets for handles on mobile */
+@media (max-width: 767px) {
+  .react-flow__controls-button {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  /* Prevent text selection on mobile while interacting */
+  .react-flow__node {
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: none;
+  }
+
+}
+
+/* Prevent canvas scrolling conflicts on touch devices */
+.react-flow {
+  touch-action: none;
 }

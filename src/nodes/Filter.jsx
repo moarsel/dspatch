@@ -1,9 +1,9 @@
 // Filter.jsx - State Variable Filter (lowpass, highpass, bandpass)
 import { el } from '@elemaudio/core';
-import { Handle, Position } from 'reactflow';
+import { Handle, Position } from '@xyflow/react';
 import { useNodeData } from '../engine/useGraph';
 import { formatFixed } from '../engine/format';
-import { NodeCard, NodeContent, ParamRow, RangeInput, SelectInput, ValueDisplay } from '../components';
+import { NodeCard, NodeContent, ParamRow, RangeInput, SelectInput, ValueDisplay, InletHandle } from '../components';
 
 export const descriptor = {
   type: 'filter',
@@ -44,22 +44,12 @@ export function FilterNode({ id, selected }) {
     <NodeCard type="filter" selected={selected} headerClassName="bg-blue-500 text-white">
       <NodeContent>
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="input"
-            className="handle inlet"
-          />
+          <InletHandle id="input" />
           <label className="w-16 text-gray-500 text-xs uppercase font-semibold">input</label>
         </ParamRow>
 
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="cutoff"
-            className="handle inlet"
-          />
+          <InletHandle id="cutoff" />
           <RangeInput
             label="cut"
             value={data.cutoff ?? 1000}
@@ -72,12 +62,7 @@ export function FilterNode({ id, selected }) {
         </ParamRow>
 
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="q"
-            className="handle inlet"
-          />
+          <InletHandle id="q" />
           <RangeInput
             label="Q"
             value={data.q ?? 1}

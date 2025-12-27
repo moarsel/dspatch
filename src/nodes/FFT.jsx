@@ -1,10 +1,10 @@
 // FFT.jsx - Frequency spectrum analyzer visualization node
 import { el } from '@elemaudio/core';
-import { Handle, Position } from 'reactflow';
+import { Handle, Position } from '@xyflow/react';
 import { useNodeData } from '../engine/useGraph';
 import { subscribe, unsubscribe } from '../engine/audioContext';
 import { useEffect, useState, useRef } from 'react';
-import { NodeCard, NodeContent, ParamRow } from '../components';
+import { NodeCard, NodeContent, ParamRow, InletHandle } from '../components';
 
 const FFT_WIDTH = 140;
 const FFT_HEIGHT = 60;
@@ -96,12 +96,7 @@ export function FFTNode({ id, selected }) {
     <NodeCard type="fft" selected={selected} headerClassName="bg-indigo-600 text-white">
       <NodeContent>
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="input"
-            className="handle inlet"
-          />
+          <InletHandle id="input" />
           <label className="w-6 text-gray-500 text-xs uppercase font-semibold">in</label>
         </ParamRow>
 

@@ -1,8 +1,8 @@
 // Gain.jsx - Simple gain/amplifier node
 import { el } from '@elemaudio/core';
-import { Handle, Position } from 'reactflow';
+import { Handle, Position } from '@xyflow/react';
 import { useNodeData } from '../engine/useGraph';
-import { NodeCard, NodeContent, ParamRow, RangeInput, ValueDisplay } from '../components';
+import { NodeCard, NodeContent, ParamRow, RangeInput, ValueDisplay, InletHandle } from '../components';
 
 export const descriptor = {
   type: 'gain',
@@ -37,22 +37,12 @@ export function GainNode({ id, selected }) {
     <NodeCard type="gain" selected={selected} category="process">
       <NodeContent>
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="input"
-            className="handle inlet"
-          />
+          <InletHandle id="input" />
           <label className="w-8 text-text-muted text-xxs uppercase font-medium tracking-wide">in</label>
         </ParamRow>
 
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="gain"
-            className="handle inlet"
-          />
+          <InletHandle id="gain" />
           <RangeInput
             label="gain"
             value={data.gain ?? 1}

@@ -1,9 +1,9 @@
 // Number.jsx - Constant value source node
 import { el } from '@elemaudio/core';
-import { Handle, Position } from 'reactflow';
+import { Handle, Position } from '@xyflow/react';
 import { useNodeData } from '../engine/useGraph';
 import { useSignalValue } from '../engine/useSignalValue';
-import { NodeCard, NodeContent, ParamRow, ValueDisplay } from '../components';
+import { NodeCard, NodeContent, ParamRow, ValueDisplay, InletHandle } from '../components';
 
 export const descriptor = {
   type: 'number',
@@ -28,12 +28,7 @@ export function NumberNode({ id, selected }) {
     <NodeCard type="number" selected={selected} headerClassName="bg-gray-600 text-white">
       <NodeContent>
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="value"
-            className="handle inlet"
-          />
+          <InletHandle id="value" />
           <input
             type="number"
             value={inputValue}

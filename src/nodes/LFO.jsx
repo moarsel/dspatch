@@ -1,9 +1,9 @@
 // LFO.jsx - Low Frequency Oscillator for modulation
 import { el } from '@elemaudio/core';
-import { Handle, Position } from 'reactflow';
+import { Handle, Position } from '@xyflow/react';
 import { useNodeData } from '../engine/useGraph';
 import { formatFixed } from '../engine/format';
-import { NodeCard, NodeContent, ParamRow, RangeInput, SelectInput, ValueDisplay } from '../components';
+import { NodeCard, NodeContent, ParamRow, RangeInput, SelectInput, ValueDisplay, InletHandle } from '../components';
 
 export const descriptor = {
   type: 'lfo',
@@ -48,12 +48,7 @@ export function LFONode({ id, selected }) {
     <NodeCard type="lfo" selected={selected} headerClassName="bg-pink-400 ">
       <NodeContent>
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="rate"
-            className="handle inlet"
-          />
+          <InletHandle id="rate" />
           <RangeInput
             label="rate"
             value={data.rate ?? 1}
@@ -66,12 +61,7 @@ export function LFONode({ id, selected }) {
         </ParamRow>
 
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="depth"
-            className="handle inlet"
-          />
+          <InletHandle id="depth" />
           <RangeInput
             label="depth"
             value={data.depth ?? 1}

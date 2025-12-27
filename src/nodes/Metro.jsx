@@ -1,10 +1,10 @@
 // Metro.jsx - Metronome/pulse train node
 import { el } from '@elemaudio/core';
-import { Handle, Position } from 'reactflow';
+import { Handle, Position } from '@xyflow/react';
 import { useNodeData } from '../engine/useGraph';
 import { useSignalHigh } from '../engine/useSignalValue';
 import { formatFixed } from '../engine/format';
-import { NodeCard, NodeContent, ParamRow, NumberInput } from '../components';
+import { NodeCard, NodeContent, ParamRow, NumberInput, InletHandle } from '../components';
 
 export const descriptor = {
   type: 'metro',
@@ -35,12 +35,7 @@ export function MetroNode({ id, selected }) {
     <NodeCard type="metro" selected={selected} headerClassName="bg-orange-300 ">
       <NodeContent>
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="bpm"
-            className="handle inlet"
-          />
+          <InletHandle id="bpm" />
           <NumberInput
             label="bpm"
             value={bpm}

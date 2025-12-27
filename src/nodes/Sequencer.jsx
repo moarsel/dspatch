@@ -1,10 +1,10 @@
 // Sequencer.jsx - Simple 8-step gate sequencer
 import { el } from '@elemaudio/core';
-import { Handle, Position } from 'reactflow';
+import { Handle, Position } from '@xyflow/react';
 import { useNodeData } from '../engine/useGraph';
 import { subscribe, unsubscribe } from '../engine/audioContext';
 import { useEffect, useState } from 'react';
-import { NodeCard, NodeContent, ParamRow } from '../components';
+import { NodeCard, NodeContent, ParamRow, InletHandle } from '../components';
 
 const NUM_STEPS = 8;
 const DEFAULT_STEPS = [1, 0, 1, 0, 1, 0, 1, 0];
@@ -94,22 +94,12 @@ export function SequencerNode({ id, selected }) {
     <NodeCard type="sequencer" selected={selected} headerClassName="bg-indigo-400 ">
       <NodeContent>
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="trigger"
-            className="handle inlet"
-          />
+          <InletHandle id="trigger" />
           <label className="w-8 text-gray-500 text-xs uppercase font-semibold">trig</label>
         </ParamRow>
 
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="reset"
-            className="handle inlet"
-          />
+          <InletHandle id="reset" />
           <label className="w-8 text-gray-500 text-xs uppercase font-semibold">reset</label>
         </ParamRow>
 

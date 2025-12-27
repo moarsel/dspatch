@@ -13,5 +13,8 @@ export {
 // Node components
 export { NodeCard, NodeContent } from './Node';
 
+// Handle components
+export { InletHandle } from './InletHandle';
+
 // Sidebar components
 export { Sidebar, SidebarHeader, NodePalette } from './Sidebar';

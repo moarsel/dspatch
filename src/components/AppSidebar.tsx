@@ -10,6 +10,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 // Node categories with their types
 const categories = {
@@ -35,12 +36,26 @@ const categoryAccents: Record<string, string> = {
 
 interface AppSidebarProps {
   availableNodes: string[]
+  onAddNode?: (nodeType: string) => void
 }
 
-export function AppSidebar({ availableNodes }: AppSidebarProps) {
+export function AppSidebar({ availableNodes, onAddNode }: AppSidebarProps) {
+  const isMobile = useIsMobile()
+  const { setOpenMobile } = useSidebar()
+
   const handleDragStart = (e: React.DragEvent, nodeType: string) => {
     e.dataTransfer.effectAllowed = 'move'
     e.dataTransfer.setData('application/reactflow', nodeType)
+  }
+
+  const handleTapToAdd = (nodeType: string) => {
+    if (onAddNode) {
+      onAddNode(nodeType)
+      // Close sidebar after adding on mobile for better UX
+      if (isMobile) {
+        setOpenMobile(false)
+      }
+    }
   }
 
   return (
@@ -71,8 +86,9 @@ export function AppSidebar({ availableNodes }: AppSidebarProps) {
                       <SidebarMenuButton
                         size="sm"
                         draggable
-                        className="cursor-grab active:cursor-grabbing h-7 rounded-md"
+                        className="h-8 md:h-7 rounded-md select-none cursor-grab active:cursor-grabbing"
                         onDragStart={(e) => handleDragStart(e, nodeType)}
+                        onClick={() => handleTapToAdd(nodeType)}
                       >
                         <span className="text-[13px]">{nodeType}</span>
                       </SidebarMenuButton>
@@ -90,13 +106,16 @@ export function AppSidebar({ availableNodes }: AppSidebarProps) {
 
 export function SidebarToggle() {
   const { state } = useSidebar()
+  const isMobile = useIsMobile()
 
   // Only show floating toggle when sidebar is collapsed
   if (state === 'expanded') return null
 
   return (
     <SidebarTrigger
-      className="fixed top-3 left-3 z-50 h-10 w-10 bg-sidebar border border-sidebar-border rounded-md shadow-md hover:bg-sidebar-accent transition-all duration-200"
+      className={`fixed top-3 left-3 z-50 bg-sidebar border border-sidebar-border rounded-md shadow-md hover:bg-sidebar-accent transition-all duration-200 ${
+        isMobile ? 'h-12 w-12' : 'h-10 w-10'
+      }`}
     />
   )
 }

@@ -1,7 +1,7 @@
 // App.jsx - Main application with React Flow canvas and sidebar
-import { useCallback, useState } from 'react';
-import ReactFlow, { Background, Controls } from 'reactflow';
-import 'reactflow/dist/style.css';
+import { useCallback, useState, useRef } from 'react';
+import {ReactFlow, Background, Controls, ReactFlowProvider, useReactFlow } from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
 import './App.css';
 
 import { useGraph } from './engine/useGraph';
@@ -10,8 +10,10 @@ import { nodeTypes, availableNodes } from './nodes';
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import { AppSidebar, SidebarToggle } from '@/components/AppSidebar';
 
-function App() {
+function AppContent() {
   const [audioStarted, setAudioStarted] = useState(false);
+  const reactFlowWrapper = useRef(null);
+  const { screenToFlowPosition } = useReactFlow();
 
   const {
     nodes,
@@ -19,6 +21,7 @@ function App() {
     onNodesChange,
     onEdgesChange,
     onConnect,
+    onReconnect,
     addNode,
     compile
   } = useGraph();
@@ -31,33 +34,44 @@ function App() {
     compile(); // Compile current graph
   }, [audioStarted, compile]);
 
-  // Handle drag from sidebar
-  const onDragStart = useCallback((event, nodeType) => {
-    event.dataTransfer.setData('application/reactflow', nodeType);
-    event.dataTransfer.effectAllowed = 'move';
-  }, []);
-
-  // Handle drop onto canvas
+  // Handle drop onto canvas (desktop drag-and-drop)
   const onDrop = useCallback((event) => {
     event.preventDefault();
 
     const type = event.dataTransfer.getData('application/reactflow');
     if (!type) return;
 
-    // Get drop position relative to the flow pane
-    const reactFlowBounds = event.currentTarget.getBoundingClientRect();
-    const position = {
-      x: event.clientX - reactFlowBounds.left,
-      y: event.clientY - reactFlowBounds.top,
-    };
+    // Convert screen coordinates to flow coordinates (accounts for zoom/pan)
+    const position = screenToFlowPosition({
+      x: event.clientX,
+      y: event.clientY,
+    });
 
     addNode(type, position);
-  }, [addNode]);
+  }, [addNode, screenToFlowPosition]);
 
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
   }, []);
+
+  // Handle tap-to-add for mobile - adds node to center of visible canvas
+  const handleAddNode = useCallback((nodeType) => {
+    if (!reactFlowWrapper.current) return;
+
+    const bounds = reactFlowWrapper.current.getBoundingClientRect();
+    // Convert center of screen to flow coordinates
+    const position = screenToFlowPosition({
+      x: bounds.width / 2,
+      y: bounds.height / 2,
+    });
+
+    // Add slight random offset so nodes don't stack exactly
+    position.x += (Math.random() - 0.5) * 60;
+    position.y += (Math.random() - 0.5) * 60;
+
+    addNode(nodeType, position);
+  }, [addNode, screenToFlowPosition]);
 
   return (
     <SidebarProvider style={{ '--sidebar-width': '14rem' }}>
@@ -67,23 +81,25 @@ function App() {
           <div className="audio-overlay" onClick={handleStartAudio}>
             <div className="audio-overlay-content">
               <h2>Welcome</h2>
-              <p>Drag nodes onto the canvas to start. To hear audio, connect to an Output.</p>
+              <p>Tap a node to add it to the canvas. Connect to an Output to hear audio.</p>
             </div>
           </div>
         )}
 
         {/* Floating Sidebar */}
-        <AppSidebar availableNodes={availableNodes} />
+        <AppSidebar availableNodes={availableNodes} onAddNode={handleAddNode} />
         <SidebarToggle />
 
         {/* React Flow Canvas */}
-        <SidebarInset className="canvas">
+        <SidebarInset className="canvas" ref={reactFlowWrapper}>
           <ReactFlow
             nodes={nodes}
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
+            onReconnect={onReconnect}
+            edgesReconnectable
             onDrop={onDrop}
             onDragOver={onDragOver}
             nodeTypes={nodeTypes}
@@ -101,6 +117,14 @@ function App() {
         </SidebarInset>
       </div>
     </SidebarProvider>
+  );
+}
+
+function App() {
+  return (
+    <ReactFlowProvider>
+      <AppContent />
+    </ReactFlowProvider>
   );
 }
 

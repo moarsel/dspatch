@@ -1,8 +1,8 @@
 // Oscillator.jsx - Sine/Saw/Square/Triangle oscillator node
 import { el } from '@elemaudio/core';
-import { Handle, Position } from 'reactflow';
+import { Handle, Position } from '@xyflow/react';
 import { useNodeData } from '../engine/useGraph';
-import { NodeCard, NodeContent, ParamRow, NumberInput, RangeInput, SelectInput, ValueDisplay } from '../components';
+import { NodeCard, NodeContent, ParamRow, NumberInput, RangeInput, SelectInput, ValueDisplay, InletHandle } from '../components';
 
 export const descriptor = {
   type: 'oscillator',
@@ -46,12 +46,7 @@ export function OscillatorNode({ id, selected }) {
     <NodeCard type="oscillator" selected={selected} category="source">
       <NodeContent>
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="frequency"
-            className="handle inlet"
-          />
+          <InletHandle id="frequency" />
           <NumberInput
             label="freq"
             value={data.frequency ?? 440}
@@ -63,12 +58,7 @@ export function OscillatorNode({ id, selected }) {
         </ParamRow>
 
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="gain"
-            className="handle inlet"
-          />
+          <InletHandle id="gain" />
           <RangeInput
             label="gain"
             value={data.gain ?? 0.5}

@@ -1,6 +1,6 @@
 // useGraph.js - Zustand store for nodes, edges, and graph compilation
 import { create } from 'zustand';
-import { addEdge, applyNodeChanges, applyEdgeChanges } from 'reactflow';
+import { addEdge, applyNodeChanges, applyEdgeChanges, reconnectEdge } from '@xyflow/react';
 import { compileGraph } from './compile';
 import { render, isInitialized } from './audioContext';
 import { registry } from '../nodes';
@@ -67,8 +67,34 @@ export const useGraph = create((set, get) => ({
 
   // Handle new connection
   onConnect: (params) => {
+    // Prevent multiple connections to the same inlet
+    const existingConnection = get().edges.find(
+      e => e.target === params.target && e.targetHandle === params.targetHandle
+    );
+    if (existingConnection) {
+      return; // Reject - inlet already has a connection
+    }
+
     set(state => ({
       edges: addEdge(params, state.edges)
+    }));
+    get().compile();
+  },
+
+  // Handle edge reconnection (drag edge to new handle)
+  onReconnect: (oldEdge, newConnection) => {
+    // Prevent reconnecting to an inlet that already has a connection
+    const existingConnection = get().edges.find(
+      e => e.id !== oldEdge.id &&
+           e.target === newConnection.target &&
+           e.targetHandle === newConnection.targetHandle
+    );
+    if (existingConnection) {
+      return; // Reject - inlet already has a connection
+    }
+
+    set(state => ({
+      edges: reconnectEdge(oldEdge, newConnection, state.edges)
     }));
     get().compile();
   },

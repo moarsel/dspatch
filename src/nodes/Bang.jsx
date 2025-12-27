@@ -1,9 +1,9 @@
 // Bang.jsx - Trigger node that outputs a gate signal
 import { el } from '@elemaudio/core';
-import { Handle, Position } from 'reactflow';
+import { Handle, Position } from '@xyflow/react';
 import { useNodeData } from '../engine/useGraph';
 import { useSignalHigh } from '../engine/useSignalValue';
-import { NodeCard, NodeContent, ParamRow, BangButton } from '../components';
+import { NodeCard, NodeContent, ParamRow, BangButton, InletHandle } from '../components';
 
 export const descriptor = {
   type: 'bang',
@@ -30,12 +30,7 @@ export function BangNode({ id, selected }) {
     <NodeCard type="bang" selected={selected} headerClassName="bg-pink-500 text-white">
       <NodeContent>
         <ParamRow centered>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="gate"
-            className="handle inlet"
-          />
+          <InletHandle id="gate" />
           <BangButton
             active={showActive}
             onMouseDown={(e) => {

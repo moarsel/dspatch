@@ -1,9 +1,9 @@
 // NoteToFreq.jsx - MIDI note to frequency converter
 import { el } from '@elemaudio/core';
-import { Handle, Position } from 'reactflow';
+import { Handle, Position } from '@xyflow/react';
 import { useNodeData } from '../engine/useGraph';
 import { formatFixed } from '../engine/format';
-import { NodeCard, NodeContent, ParamRow, NumberInput, SelectInput, ValueDisplay } from '../components';
+import { NodeCard, NodeContent, ParamRow, NumberInput, SelectInput, ValueDisplay, InletHandle } from '../components';
 
 // Note names for the GUI selector
 const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
@@ -65,12 +65,7 @@ export function NoteToFreqNode({ id, selected }) {
     <NodeCard type="notetofreq" selected={selected} headerClassName="bg-blue-400 ">
       <NodeContent>
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="note"
-            className="handle inlet"
-          />
+          <InletHandle id="note" />
           <SelectInput
             label="note"
             value={NOTE_NAMES[currentNote % 12]}

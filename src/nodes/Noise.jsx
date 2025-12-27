@@ -1,9 +1,9 @@
 // Noise.jsx - White/Pink noise generator node
 import { el } from '@elemaudio/core';
-import { Handle, Position } from 'reactflow';
+import { Handle, Position } from '@xyflow/react';
 import { useNodeData } from '../engine/useGraph';
 import { formatFixed } from '../engine/format';
-import { NodeCard, NodeContent, ParamRow, RangeInput, SelectInput, ValueDisplay } from '../components';
+import { NodeCard, NodeContent, ParamRow, RangeInput, SelectInput, ValueDisplay, InletHandle } from '../components';
 
 export const descriptor = {
   type: 'noise',
@@ -42,12 +42,7 @@ export function NoiseNode({ id, selected }) {
     <NodeCard type="noise" selected={selected} headerClassName="bg-gray-500 ">
       <NodeContent>
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="gain"
-            className="handle inlet"
-          />
+          <InletHandle id="gain" />
           <RangeInput
             label="gain"
             value={data.gain ?? 0.5}

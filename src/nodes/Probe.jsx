@@ -1,8 +1,8 @@
 // Probe.jsx - Numeric signal inspector for debugging signal math
 import { el } from '@elemaudio/core';
-import { Handle, Position } from 'reactflow';
+import { Handle, Position } from '@xyflow/react';
 import { useSignalValue } from '../engine/useSignalValue';
-import { NodeCard, NodeContent, ParamRow } from '../components';
+import { NodeCard, NodeContent, ParamRow, InletHandle } from '../components';
 
 export const descriptor = {
   type: 'probe',
@@ -25,12 +25,7 @@ export function ProbeNode({ id, selected }) {
     <NodeCard type="probe" selected={selected} headerClassName="bg-cyan-300 ">
       <NodeContent>
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="input"
-            className="handle inlet"
-          />
+          <InletHandle id="input" />
           <div className="flex-1 text-center font-mono text-lg font-bold text-cyan-400 py-2">
             {display}
           </div>

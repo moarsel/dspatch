@@ -1,10 +1,10 @@
 // Envelope.jsx - ADSR envelope generator
 import { el } from '@elemaudio/core';
-import { Handle, Position } from 'reactflow';
+import { Handle, Position } from '@xyflow/react';
 import { useNodeData } from '../engine/useGraph';
 import { useSignalValue } from '../engine/useSignalValue';
 import { formatFixed } from '../engine/format';
-import { NodeCard, NodeContent, ParamRow, RangeInput, GateButton, ValueDisplay } from '../components';
+import { NodeCard, NodeContent, ParamRow, RangeInput, GateButton, ValueDisplay, InletHandle } from '../components';
 
 export const descriptor = {
   type: 'envelope',
@@ -41,12 +41,7 @@ export function EnvelopeNode({ id, selected }) {
     <NodeCard type="envelope" selected={selected} headerClassName="bg-yellow-400 ">
       <NodeContent>
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="gate"
-            className="handle inlet"
-          />
+          <InletHandle id="gate" />
           <GateButton
             active={gateActive}
             onMouseDown={(e) => { e.stopPropagation(); updateParam('gate', 1); }}
@@ -59,12 +54,7 @@ export function EnvelopeNode({ id, selected }) {
         </ParamRow>
 
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="attack"
-            className="handle inlet"
-          />
+          <InletHandle id="attack" />
           <RangeInput
             label="A"
             value={data.attack ?? 0.01}
@@ -77,12 +67,7 @@ export function EnvelopeNode({ id, selected }) {
         </ParamRow>
 
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="decay"
-            className="handle inlet"
-          />
+          <InletHandle id="decay" />
           <RangeInput
             label="D"
             value={data.decay ?? 0.1}
@@ -95,12 +80,7 @@ export function EnvelopeNode({ id, selected }) {
         </ParamRow>
 
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="sustain"
-            className="handle inlet"
-          />
+          <InletHandle id="sustain" />
           <RangeInput
             label="S"
             value={data.sustain ?? 0.7}
@@ -113,12 +93,7 @@ export function EnvelopeNode({ id, selected }) {
         </ParamRow>
 
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="release"
-            className="handle inlet"
-          />
+          <InletHandle id="release" />
           <RangeInput
             label="R"
             value={data.release ?? 0.3}

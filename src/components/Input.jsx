@@ -98,9 +98,9 @@ export function SelectInput({ label, value, onChange, options, ...props }) {
  */
 export function ParamRow({ label, children, centered = false, ...props }) {
   return (
-    <div className={`relative flex items-center gap-1.5 py-0.5 px-0 min-h-5 ${centered ? 'justify-center' : ''}`} {...props}>
+    <div className={`relative flex items-center gap-3 py-1 px-0 min-h-6 ${centered ? 'justify-center' : ''}`} {...props}>
       {label && (
-        <label className="w-8 text-text-muted text-xxs uppercase font-medium tracking-wide">
+        <label className="w-8 text-text-muted text-xs uppercase font-medium tracking-wide">
           {label}
         </label>
       )}

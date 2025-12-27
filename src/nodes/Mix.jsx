@@ -1,8 +1,8 @@
 // Mix.jsx - 2-input signal mixer
 import { el } from '@elemaudio/core';
-import { Handle, Position } from 'reactflow';
+import { Handle, Position } from '@xyflow/react';
 import { useNodeData } from '../engine/useGraph';
-import { NodeCard, NodeContent, ParamRow, RangeInput, ValueDisplay } from '../components';
+import { NodeCard, NodeContent, ParamRow, RangeInput, ValueDisplay, InletHandle } from '../components';
 
 export const descriptor = {
   type: 'mix',
@@ -61,32 +61,17 @@ export function MixNode({ id, selected }) {
     <NodeCard type="mix" selected={selected} headerClassName="bg-teal-500 ">
       <NodeContent>
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="a"
-            className="handle inlet"
-          />
+          <InletHandle id="a" />
           <label className="w-6 text-gray-500 text-xs uppercase font-semibold">A</label>
         </ParamRow>
 
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="b"
-            className="handle inlet"
-          />
+          <InletHandle id="b" />
           <label className="w-6 text-gray-500 text-xs uppercase font-semibold">B</label>
         </ParamRow>
 
         <ParamRow>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id="balance"
-            className="handle inlet"
-          />
+          <InletHandle id="balance" />
           <RangeInput
             label="bal"
             value={data.balance ?? 0.5}
