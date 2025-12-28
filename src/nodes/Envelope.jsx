@@ -17,14 +17,24 @@ export const descriptor = {
   },
   outlets: ['signal'],
   compile: (inputs, nodeId) => {
-    // Elementary handles numbers automatically
-    const env = el.round(el.adsr(
+    let gate;
+
+    if (typeof inputs.gate === 'object') {
+      // Signal from connected node  - use directly
+      gate = inputs.gate;
+    } else {
+      gate = inputs.gate > 0 
+          ? el.const({key: 'silence', value: 1}) 
+          :  el.const({ key: "silence", value: 0 });
+    }
+
+    const env = el.adsr(
       inputs.attack ?? 0.01,
       inputs.decay ?? 0.1,
       inputs.sustain ?? 0.7,
       inputs.release ?? 0.3,
-      inputs.gate ?? 0
-    ));
+      gate
+    );
 
     return {
       signal: el.meter({ name: nodeId }, env)

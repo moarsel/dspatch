@@ -12,9 +12,19 @@ export const descriptor = {
   },
   outlets: ['signal'],
   compile: (inputs, nodeId) => {
-    // Elementary handles numbers automatically - no need to wrap in el.const
+    let gate;
+
+    if (typeof inputs.gate === 'object') {
+      // Signal from connected node - use directly
+      gate = inputs.gate;
+    } else {
+      gate =  inputs.gate > 0 
+          ? el.const({key: 'silence', value: 1}) 
+          :  el.const({ key: "silence", value: 0 });
+    }
+
     return {
-      signal: el.meter({ name: nodeId }, inputs.gate ?? 0)
+      signal: gate
     };
   }
 };

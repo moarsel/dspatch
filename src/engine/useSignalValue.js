@@ -43,7 +43,7 @@ export function useSignalValue(name) {
  * @param {number} threshold - Value above which signal is "high" (default 0.5)
  * @returns {boolean}
  */
-export function useSignalHigh(name, threshold = 0.5) {
+export function useSignalHigh(name, threshold = 1) {
   const { max } = useSignalValue(name);
-  return max > threshold;
+  return max >= threshold;
 }
