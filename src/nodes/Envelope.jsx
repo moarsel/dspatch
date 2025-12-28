@@ -18,13 +18,13 @@ export const descriptor = {
   outlets: ['signal'],
   compile: (inputs, nodeId) => {
     // Elementary handles numbers automatically
-    const env = el.adsr(
+    const env = el.round(el.adsr(
       inputs.attack ?? 0.01,
       inputs.decay ?? 0.1,
       inputs.sustain ?? 0.7,
       inputs.release ?? 0.3,
       inputs.gate ?? 0
-    );
+    ));
 
     return {
       signal: el.meter({ name: nodeId }, env)
@@ -35,7 +35,7 @@ export const descriptor = {
 export function EnvelopeNode({ id, selected }) {
   const { data, updateParam } = useNodeData(id);
   const { value: envValue, display } = useSignalValue(id);
-  const gateActive = data.gate || envValue > 0.01;
+  const gateActive = data.gate || envValue >= 1;
 
   return (
     <NodeCard type="envelope" selected={selected} headerClassName="bg-yellow-400 ">

@@ -149,7 +149,16 @@ export const useGraph = create((set, get) => ({
     if (result) {
       render(result.left, result.right);
     }
-  }
+  },
+
+  // Load a preset (replace all nodes and edges)
+  loadPreset: (preset) => {
+    set({
+      nodes: preset.nodes,
+      edges: preset.edges,
+    });
+    get().compile();
+  },
 }));
 
 /**

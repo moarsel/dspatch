@@ -6,11 +6,16 @@ import './App.css';
 
 import { useGraph } from './engine/useGraph';
 import { initAudio } from './engine/audioContext';
+import { getPreset } from './engine/presets';
 import { nodeTypes, availableNodes } from './nodes';
 import { edgeTypes } from './edges';
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import { AppSidebar, SidebarToggle } from '@/components/AppSidebar';
 import { TrashZone } from './components/TrashZone';
+import { PatchExplorer } from '@/components/PatchExplorer';
+import { usePatchExplorer } from '@/hooks/use-patch-explorer';
+import { Button } from '@/components/ui/button';
+import { Info } from 'lucide-react';
 
 function AppContent() {
   const [audioStarted, setAudioStarted] = useState(false);
@@ -26,6 +31,7 @@ function AppContent() {
     onConnect,
     onReconnect,
     addNode,
+    loadPreset,
     compile
   } = useGraph();
 
@@ -39,13 +45,20 @@ function AppContent() {
     onNodesChange(changes);
   }, [onNodesChange]);
 
-  // Start audio on first user interaction
-  const handleStartAudio = useCallback(async () => {
-    if (audioStarted) return;
-    await initAudio();
-    setAudioStarted(true);
-    compile(); // Compile current graph
-  }, [audioStarted, compile]);
+  // Start audio and load preset for selected tab
+  const handleStartAudio = useCallback(async (tabId) => {
+    // Load the preset for this tab
+    const preset = getPreset(tabId);
+    loadPreset(preset);
+
+    // Initialize audio if not already started
+    if (!audioStarted) {
+      await initAudio();
+      setAudioStarted(true);
+    }
+
+    compile();
+  }, [audioStarted, loadPreset, compile]);
 
   // Handle drop onto canvas (desktop drag-and-drop)
   const onDrop = useCallback((event) => {
@@ -89,14 +102,19 @@ function AppContent() {
   return (
     <SidebarProvider style={{ '--sidebar-width': '14rem' }}>
       <div className="app dark">
-        {/* Start Audio Overlay */}
-        {!audioStarted && (
-          <div className="audio-overlay" onClick={handleStartAudio}>
-            <div className="audio-overlay-content">
-              <h2>Welcome</h2>
-              <p>Tap a node to add it to the canvas. Connect to an Output to hear audio.</p>
-            </div>
-          </div>
+        {/* Patch Explorer Modal */}
+        <PatchExplorer onStart={handleStartAudio} audioStarted={audioStarted} />
+
+        {/* Info button to reopen Patch Explorer */}
+        {audioStarted && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="fixed top-4 right-4 z-40 bg-card/80 backdrop-blur-sm"
+            onClick={() => usePatchExplorer.getState().open()}
+          >
+            <Info className="h-5 w-5" />
+          </Button>
         )}
 
         {/* Floating Sidebar */}
