@@ -26,6 +26,16 @@ export function BangNode({ id, selected }) {
   // Button is active if manually pressed OR receiving high signal
   const showActive = data.gate || isActive;
 
+  const handleDown = (e) => {
+    e.preventDefault();
+    updateParam('gate', 1);
+  };
+
+  const handleUp = (e) => {
+    e.preventDefault();
+    updateParam('gate', 0);
+  };
+
   return (
     <NodeCard type="bang" selected={selected} headerClassName="bg-pink-500 text-white">
       <NodeContent>
@@ -33,15 +43,11 @@ export function BangNode({ id, selected }) {
           <InletHandle id="gate" />
           <BangButton
             active={showActive}
-            onMouseDown={(e) => {
-              e.stopPropagation();
-              updateParam('gate', 1);
-            }}
-            onMouseUp={(e) => {
-              e.stopPropagation();
-              updateParam('gate', 0);
-            }}
-            onMouseLeave={() => updateParam('gate', 0)}
+            onKeyDown={handleDown}
+            onKeyUp={handleUp}
+            onMouseDown={handleDown}
+            onMouseUp={handleUp}
+            onMouseLeave={handleUp}
           />
         </ParamRow>
       </NodeContent>

@@ -42,10 +42,10 @@ export function Button({
 export function BangButton({ active = false, ...props }) {
   return (
     <button
-      className={`w-10 h-10 rounded-full border-none font-bold text-xl flex items-center justify-center transition-all duration-100 ${
+      className={`nodrag nopan w-10 h-10 rounded-full border-none font-bold text-xl flex items-center justify-center transition-all duration-100 ${
         active
           ? 'bg-pink-500 text-white shadow-lg shadow-pink-500/50'
-          : 'bg-gray-700 text-gray-600 hover:bg-gray-600'
+          : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
       }`}
       {...props}
     >
@@ -60,7 +60,7 @@ export function BangButton({ active = false, ...props }) {
 export function GateButton({ active = false, ...props }) {
   return (
     <button
-      className={`px-2 py-0.5 rounded text-xs font-bold transition-all duration-100 ${
+      className={`nodrag nopan px-2 py-0.5 rounded text-xs font-bold transition-all duration-100 ${
         active
           ? 'bg-green-500 text-gray-900'
           : 'bg-gray-700 text-gray-600 hover:bg-gray-600'

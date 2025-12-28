@@ -3,7 +3,6 @@ import { useRef, useEffect, useState, useMemo, useCallback } from 'react';
 import { BaseEdge, EdgeLabelRenderer, getSmoothStepPath } from '@xyflow/react';
 import { useEdgeSignal } from './useEdgeSignal';
 import { useGraph } from '../engine/useGraph';
-import { getChunkPositions } from './edgeAnimation';
 import { formatCompact } from '../engine/format';
 
 // Scope mode constants
@@ -12,10 +11,10 @@ const RENDER_SAMPLES = 64;
 const TAPER_FRACTION = 0.2;
 
 // Meter mode constants
-const NUM_CHUNKS = 10;
-const ANIMATION_SPEED = 0.5;
-const BASE_SIZE = 2;
-const MAX_SIZE = 6;
+const NUM_CHUNKS = 18;
+const ANIMATION_SPEED = .3;
+const BASE_SIZE = 0;
+const MAX_SIZE = 10;
 
 const MODES = ['probe', 'scope', 'meter'];
 
@@ -80,8 +79,9 @@ export function SignalEdge({
   }, [mode]);
 
   // Meter mode: update chunk sizes when new chunks enter
-  const signalLevel = Math.max(Math.abs(meter.min), Math.abs(meter.max));
+  const signalLevel = meter.max;
   const currentSize = BASE_SIZE + signalLevel * (MAX_SIZE - BASE_SIZE);
+
   const currentSlot = Math.floor(animationOffset * NUM_CHUNKS) % NUM_CHUNKS;
   if (mode === 'meter' && currentSlot !== lastSlotRef.current) {
     chunkSizesRef.current[currentSlot] = currentSize;
@@ -91,7 +91,34 @@ export function SignalEdge({
   // Meter mode: chunk positions
   const chunkPositions = useMemo(() => {
     if (mode !== 'meter' || !pathReady || !pathRef.current) return [];
-    return getChunkPositions(pathRef.current, NUM_CHUNKS, animationOffset);
+
+    const path = pathRef.current;
+    const totalLength = path.getTotalLength();
+    const positions = [];
+    const epsilon = 0.5;
+
+    for (let i = 0; i < NUM_CHUNKS; i++) {
+      const t = (i / NUM_CHUNKS + animationOffset) % 1;
+      const len = t * totalLength;
+      const point = path.getPointAtLength(len);
+
+      // Calculate perpendicular direction
+      const lenBefore = Math.max(0, len - epsilon);
+      const lenAfter = Math.min(totalLength, len + epsilon);
+      const pointBefore = path.getPointAtLength(lenBefore);
+      const pointAfter = path.getPointAtLength(lenAfter);
+
+      const dx = pointAfter.x - pointBefore.x;
+      const dy = pointAfter.y - pointBefore.y;
+      const mag = Math.sqrt(dx * dx + dy * dy);
+
+      const perpX = mag > 0 ? -dy / mag : 0;
+      const perpY = mag > 0 ? dx / mag : 0;
+
+      positions.push({ x: point.x, y: point.y, perpX, perpY });
+    }
+
+    return positions;
   }, [mode, pathReady, animationOffset]);
 
   // Scope mode: build waveform path
@@ -167,7 +194,7 @@ export function SignalEdge({
   }, [id, deleteEdge]);
 
   // Format probe value
-  const probeValue = formatCompact(Math.max(Math.abs(meter.min), Math.abs(meter.max)));
+  const probeValue = formatCompact(meter.max);
 
   return (
     <>
@@ -201,17 +228,23 @@ export function SignalEdge({
         />
       )}
 
-      {/* Meter mode: animated circles */}
-      {mode === 'meter' && chunkPositions.map((pos, i) => (
-        <circle
-          key={i}
-          cx={pos.x}
-          cy={pos.y}
-          r={chunkSizesRef.current[i]}
-          fill="#898686ff"
-          className="signal-edge-chunk"
-        />
-      ))}
+      {/* Meter mode: animated perpendicular lines */}
+      {mode === 'meter' && chunkPositions.map((pos, i) => {
+        const size = chunkSizesRef.current[i];
+        return (
+          <line
+            key={i}
+            x1={pos.x - pos.perpX * size}
+            y1={pos.y - pos.perpY * size}
+            x2={pos.x + pos.perpX * size}
+            y2={pos.y + pos.perpY * size}
+            stroke="#898686"
+            strokeWidth="4"
+            strokeLinecap="round"
+            className="signal-edge-chunk"
+          />
+        );
+      })}
 
       {/* Edge label with mode toggle and delete button */}
       <EdgeLabelRenderer>
