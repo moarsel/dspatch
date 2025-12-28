@@ -142,15 +142,17 @@ export function compileGraph(nodes, edges, registry) {
     }
   }
 
-  // Add edge meters at zero gain for visualization
+  // Add edge meter and scope at zero gain for visualization
   for (const edge of edges) {
     const sourceOutputs = compiled.get(edge.source);
     if (sourceOutputs && sourceOutputs[edge.sourceHandle] !== undefined) {
       const signal = sourceOutputs[edge.sourceHandle];
       if (typeof signal === 'object' && signal !== null) {
-        const meterId = edge.id;
-        const edgeMeter = el.meter({ name: meterId }, signal);
-        const silent = el.mul(el.const({ key: `${meterId}:z`, value: 0 }), edgeMeter);
+        // Add meter for probe/meter modes
+        const edgeMeter = el.meter({ name: `${edge.id}:meter` }, signal);
+        // Add scope for scope mode (scope is passthrough, so chain through meter)
+        const edgeScope = el.scope({ name: `${edge.id}:scope` }, edgeMeter);
+        const silent = el.mul(el.const({ key: `${edge.id}:z`, value: 0 }), edgeScope);
         left = el.add(left, silent);
       }
     }

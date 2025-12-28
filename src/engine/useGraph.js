@@ -111,6 +111,34 @@ export const useGraph = create((set, get) => ({
     get().compile();
   },
 
+  // Update an edge's data (e.g., visualization mode)
+  updateEdgeData: (edgeId, key, value) => {
+    set(state => ({
+      edges: state.edges.map(e =>
+        e.id === edgeId
+          ? { ...e, data: { ...e.data, [key]: value } }
+          : e
+      )
+    }));
+  },
+
+  // Delete an edge
+  deleteEdge: (edgeId) => {
+    set(state => ({
+      edges: state.edges.filter(e => e.id !== edgeId)
+    }));
+    get().compile();
+  },
+
+  // Delete a node and its connected edges
+  deleteNode: (nodeId) => {
+    set(state => ({
+      nodes: state.nodes.filter(n => n.id !== nodeId),
+      edges: state.edges.filter(e => e.source !== nodeId && e.target !== nodeId)
+    }));
+    get().compile();
+  },
+
   // Compile and render the audio graph
   compile: () => {
     if (!isInitialized()) return;

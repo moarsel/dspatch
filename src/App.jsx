@@ -10,9 +10,11 @@ import { nodeTypes, availableNodes } from './nodes';
 import { edgeTypes } from './edges';
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import { AppSidebar, SidebarToggle } from '@/components/AppSidebar';
+import { TrashZone } from './components/TrashZone';
 
 function AppContent() {
   const [audioStarted, setAudioStarted] = useState(false);
+  const [draggingNodeId, setDraggingNodeId] = useState(null);
   const reactFlowWrapper = useRef(null);
   const { screenToFlowPosition } = useReactFlow();
 
@@ -26,6 +28,16 @@ function AppContent() {
     addNode,
     compile
   } = useGraph();
+
+  // Track node dragging for trash zone
+  const handleNodesChange = useCallback((changes) => {
+    for (const change of changes) {
+      if (change.type === 'position' && change.dragging !== undefined) {
+        setDraggingNodeId(change.dragging ? change.id : null);
+      }
+    }
+    onNodesChange(changes);
+  }, [onNodesChange]);
 
   // Start audio on first user interaction
   const handleStartAudio = useCallback(async () => {
@@ -96,7 +108,7 @@ function AppContent() {
           <ReactFlow
             nodes={nodes}
             edges={edges}
-            onNodesChange={onNodesChange}
+            onNodesChange={handleNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             onReconnect={onReconnect}
@@ -116,6 +128,9 @@ function AppContent() {
             <Controls position='bottom-right' />
           </ReactFlow>
         </SidebarInset>
+
+        {/* Trash zone for deleting nodes by dragging */}
+        <TrashZone isDragging={!!draggingNodeId} draggedNodeId={draggingNodeId} />
       </div>
     </SidebarProvider>
   );
