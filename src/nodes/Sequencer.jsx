@@ -1,13 +1,15 @@
-// Sequencer.jsx - Simple 8-step gate sequencer
+// Sequencer.jsx - Simple 8-step MIDI note sequencer
 import { el } from '@elemaudio/core';
 import { Handle, Position } from '@xyflow/react';
 import { useNodeData } from '../engine/useGraph';
 import { subscribe, unsubscribe } from '../engine/audioContext';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { NodeCard, NodeContent, ParamRow, InletHandle } from '../components';
 
 const NUM_STEPS = 8;
-const DEFAULT_STEPS = [1, 0, 1, 0, 1, 0, 1, 0];
+const DEFAULT_STEPS = [60, 64, 67, 72, 67, 64, 60, 55]; // C major arpeggio
+const MIN_NOTE = 36; // C2
+const MAX_NOTE = 96; // C7
 
 export const descriptor = {
   type: 'sequencer',
@@ -20,7 +22,7 @@ export const descriptor = {
     const trigger = inputs.trigger;
     const reset = inputs.reset;
 
-    // Get step values from node data (0 or 1)
+    // Get step values from node data (MIDI notes)
     const steps = [];
     for (let i = 0; i < NUM_STEPS; i++) {
       steps.push(inputs[`step${i}`] ?? DEFAULT_STEPS[i]);
@@ -67,6 +69,8 @@ export const descriptor = {
 export function SequencerNode({ id, selected }) {
   const { data, updateParam } = useNodeData(id);
   const [currentStep, setCurrentStep] = useState(0);
+  const [dragging, setDragging] = useState(null); // { index, startY, startValue }
+  const containerRef = useRef(null);
 
   // Get step values
   const steps = [];
@@ -85,10 +89,43 @@ export function SequencerNode({ id, selected }) {
     return () => unsubscribe('meter', `${id}:pos`);
   }, [id]);
 
-  const toggleStep = (i) => {
-    const current = data[`step${i}`] ?? DEFAULT_STEPS[i];
-    updateParam(`step${i}`, current > 0.5 ? 0 : 1);
+  const handleMouseDown = useCallback((e, index) => {
+    e.stopPropagation();
+    const startValue = steps[index];
+    setDragging({ index, startY: e.clientY, startValue });
+  }, [steps]);
+
+  useEffect(() => {
+    if (dragging === null) return;
+
+    const handleMouseMove = (e) => {
+      const deltaY = dragging.startY - e.clientY; // Invert: drag up = increase
+      const sensitivity = 1; // 1 MIDI note per pixel
+      const newValue = Math.round(
+        Math.min(MAX_NOTE, Math.max(MIN_NOTE, dragging.startValue + deltaY * sensitivity))
+      );
+      updateParam(`step${dragging.index}`, newValue);
+    };
+
+    const handleMouseUp = () => {
+      setDragging(null);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [dragging, updateParam]);
+
+  // Convert MIDI note to height percentage
+  const noteToHeight = (note) => {
+    return ((note - MIN_NOTE) / (MAX_NOTE - MIN_NOTE)) * 100;
   };
+
+  const CONTAINER_HEIGHT = 48; // pixels
 
   return (
     <NodeCard type="sequencer" selected={selected} headerClassName="bg-indigo-400 ">
@@ -103,31 +140,40 @@ export function SequencerNode({ id, selected }) {
           <label className="w-8 text-gray-500 text-xs uppercase font-semibold">reset</label>
         </ParamRow>
 
-        <div className="flex gap-0.5 mt-2 p-1 bg-gray-800 rounded">
+        <div
+          ref={containerRef}
+          className="flex gap-0.5 mt-2 p-1 bg-gray-800 rounded items-end"
+          style={{ height: CONTAINER_HEIGHT + 8 }} // +8 for padding
+        >
           {steps.map((value, i) => {
-            const isOn = value > 0.5;
             const isActive = currentStep === i;
+            const heightPercent = noteToHeight(value);
             return (
               <button
                 key={i}
-                onClick={() => toggleStep(i)}
-                className={`w-3.5 h-6 border-0 rounded transition-colors ${
-                  isOn
-                    ? (isActive ? 'bg-pink-500 shadow-lg shadow-pink-500/60' : 'bg-indigo-500')
-                    : (isActive ? 'bg-gray-600 shadow-lg shadow-pink-500/60' : 'bg-gray-700')
+                onMouseDown={(e) => handleMouseDown(e, i)}
+                className={`nodrag w-4 rounded cursor-ns-resize transition-colors select-none border-0 ${
+                  isActive
+                    ? 'bg-pink-500 shadow-lg shadow-pink-500/60'
+                    : 'bg-indigo-500 hover:bg-indigo-400'
                 }`}
+                style={{
+                  height: `${Math.max(4, heightPercent)}%`,
+                  minHeight: 4
+                }}
+                title={`Note: ${value}`}
               />
             );
           })}
         </div>
 
         <div className="flex justify-between text-xs text-gray-600 mt-0.5 px-1">
-          {steps.map((_, i) => (
+          {steps.map((value, i) => (
             <span
               key={i}
-              className={`w-3.5 text-center transition-colors ${currentStep === i ? 'text-pink-500' : ''}`}
+              className={`w-4 text-center transition-colors ${currentStep === i ? 'text-pink-500' : ''}`}
             >
-              {i + 1}
+              {value}
             </span>
           ))}
         </div>

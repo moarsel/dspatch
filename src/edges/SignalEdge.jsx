@@ -16,7 +16,7 @@ const ANIMATION_SPEED = .3;
 const BASE_SIZE = 0;
 const MAX_SIZE = 10;
 
-const MODES = ['probe', 'scope', 'meter'];
+const MODES = ['probe', 'scope', 'wave'];
 
 export function SignalEdge({
   id,
@@ -38,7 +38,7 @@ export function SignalEdge({
   // Get current mode from edge data, default to 'probe'
   const mode = data?.mode ?? 'probe';
 
-  // Meter mode animation state
+  // Wave mode animation state
   const [animationOffset, setAnimationOffset] = useState(0);
   const chunkSizesRef = useRef(new Array(NUM_CHUNKS).fill(BASE_SIZE));
   const lastSlotRef = useRef(-1);
@@ -60,9 +60,9 @@ export function SignalEdge({
     }
   }, [edgePath]);
 
-  // Meter mode animation loop
+  // Wave mode animation loop
   useEffect(() => {
-    if (mode !== 'meter') return;
+    if (mode !== 'wave') return;
 
     let animationId;
     let lastTime = performance.now();
@@ -78,19 +78,19 @@ export function SignalEdge({
     return () => cancelAnimationFrame(animationId);
   }, [mode]);
 
-  // Meter mode: update chunk sizes when new chunks enter
-  const signalLevel = meter.max;
+  // Wave mode: update chunk sizes when new chunks enter
+  const signalLevel = Math.max(-1, Math.min(1, meter.max));
   const currentSize = BASE_SIZE + signalLevel * (MAX_SIZE - BASE_SIZE);
 
   const currentSlot = Math.floor(animationOffset * NUM_CHUNKS) % NUM_CHUNKS;
-  if (mode === 'meter' && currentSlot !== lastSlotRef.current) {
+  if (mode === 'wave' && currentSlot !== lastSlotRef.current) {
     chunkSizesRef.current[currentSlot] = currentSize;
     lastSlotRef.current = currentSlot;
   }
 
-  // Meter mode: chunk positions
+  // Wave mode: chunk positions
   const chunkPositions = useMemo(() => {
-    if (mode !== 'meter' || !pathReady || !pathRef.current) return [];
+    if (mode !== 'wave' || !pathReady || !pathRef.current) return [];
 
     const path = pathRef.current;
     const totalLength = path.getTotalLength();
@@ -228,8 +228,8 @@ export function SignalEdge({
         />
       )}
 
-      {/* Meter mode: animated perpendicular lines */}
-      {mode === 'meter' && chunkPositions.map((pos, i) => {
+      {/* Wave mode: animated perpendicular lines */}
+      {mode === 'wave' && chunkPositions.map((pos, i) => {
         const size = chunkSizesRef.current[i];
         return (
           <line

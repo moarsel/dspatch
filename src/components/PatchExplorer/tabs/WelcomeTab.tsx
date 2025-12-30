@@ -19,7 +19,8 @@ export function WelcomeTab() {
         <p>
           A patch is a network of connected nodes. Each node either generates
           a signal (like an oscillator) or transforms one (like a filter).
-          Signals flow from outputs (bottom of nodes) to inputs (top of nodes).
+          Signals flow from left to right: a node outputs a signal from an outlet on its right side, which can then be connected to the inlet on another node's left side. The oscillator's output
+          connects to the Output node's input.
         </p>
       </Section>
 

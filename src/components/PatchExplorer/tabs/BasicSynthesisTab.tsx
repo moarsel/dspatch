@@ -3,12 +3,14 @@ export function BasicSynthesisTab() {
     <div className="space-y-6">
       <p className="text-muted-foreground leading-relaxed">
         This patch adds an envelope to shape the oscillator's amplitude over time,
-        creating a more musical sound.
+        creating a more musical sound. Instead of just setting the volume of a note to 0 or 1, 
+        we can have more control of the volume over time. For example, a violin might stay at 
+        the same volume for several seconds, but a drum hit will be get loud quickly then fade out just as fast.
       </p>
 
       <Section title="The Envelope">
         <p>
-          An envelope is a control signal that changes over time when triggered.
+          An envelope is a signal that changes over time when triggered.
           The ADSR envelope has four stages:
         </p>
         <ul className="list-inside list-disc space-y-1 pl-2">
@@ -17,22 +19,6 @@ export function BasicSynthesisTab() {
           <li><strong>Sustain</strong> — the level held while the note is on</li>
           <li><strong>Release</strong> — how quickly it fades after the note ends</li>
         </ul>
-      </Section>
-
-      <Section title="Amplitude Modulation">
-        <p>
-          When you multiply an oscillator's output by an envelope, you're
-          modulating its amplitude. The envelope acts as a "volume knob" that
-          moves automatically over time, giving the sound shape and dynamics.
-        </p>
-      </Section>
-
-      <Section title="Why Envelopes Matter">
-        <p>
-          A constant tone sounds artificial and lifeless. Real sounds have
-          attack (a piano hammer striking) and decay (the string resonating
-          then fading). Envelopes let you sculpt these characteristics.
-        </p>
       </Section>
     </div>
   )

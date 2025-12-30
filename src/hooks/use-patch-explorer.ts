@@ -5,7 +5,6 @@ export type TabId =
   | 'getting-started'
   | 'basic-synthesis'
   | 'sequencer'
-  | 'advanced'
   | 'presets'
 
 export const TAB_TITLES: Record<TabId, string> = {
@@ -13,7 +12,6 @@ export const TAB_TITLES: Record<TabId, string> = {
   'getting-started': 'Getting Started',
   'basic-synthesis': 'Basic Synthesizer',
   'sequencer': 'Sequencer & Sampling',
-  'advanced': 'Advanced Techniques',
   'presets': 'Preset Instruments',
 }
 
@@ -22,7 +20,6 @@ export const TABS: { id: TabId; label: string }[] = [
   { id: 'getting-started', label: 'Getting Started' },
   { id: 'basic-synthesis', label: 'Basic Synth' },
   { id: 'sequencer', label: 'Sequencer' },
-  { id: 'advanced', label: 'Advanced' },
   { id: 'presets', label: 'Presets' },
 ]
 

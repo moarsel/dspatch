@@ -8,7 +8,7 @@ export function GettingStartedTab() {
 
       <Section title="The Oscillator">
         <p>
-          An oscillator generates a repeating waveform. The <strong>frequency</strong> controls
+          An oscillator makes a sound by cycling between the values 1 and -1 very quickly to push and pull your speaker back and forth. The <strong>frequency</strong> controls
           how fast it repeats — higher frequencies sound higher pitched. 440 Hz means
           the wave completes 440 cycles every second (the note A4).
         </p>
@@ -21,17 +21,16 @@ export function GettingStartedTab() {
 
       <Section title="The Bang">
         <p>
-          A Bang sends a single trigger pulse when clicked. In this patch, it
-          triggers the envelope that shapes the sound. Without a trigger, the
-          envelope stays silent.
+          A Bang sends a signal with the value 1 when clicked, or a 0 when not being clicked. In this patch, this signal goes into the 'gain' inlet for the oscillator, which controls the height of the wave (a.k.a. it's "amplitude").
+          When we click the button and send a 1 the oscillator is full volume, and when we release the button, the height of the wave is 0 and the oscillator is silent.
         </p>
       </Section>
 
       <Section title="Signal Flow">
         <p>
-          Signals flow downward through connections. The oscillator's output
-          connects to the Output node's input. This simple chain — source to
-          output — is the foundation of every patch you'll build.
+         The values being sent through each connection can be visualized by looking at the number displayed in the middle of each connecting line. 
+         For a signal like an oscillator, the number changes between -1 and 1 so quickly that it is more helpful to see a zoomed in snapshot of current value. Click the edge button to see the scope view between the oscillator and the output.
+         To visualize how a signal changes over several seconds, you can get a more zoomed out view with the wave view. Select the wave view for the connetion between the Bang and the Oscillator.
         </p>
       </Section>
     </div>

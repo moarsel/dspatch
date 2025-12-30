@@ -68,7 +68,7 @@ export function FilterNode({ id, selected }) {
             value={data.q ?? 1}
             onChange={e => updateParam('q', parseFloat(e.target.value))}
             min="0.1"
-            max="20"
+            max="70"
             step="0.1"
           />
           <ValueDisplay value={data.q ?? 1} />

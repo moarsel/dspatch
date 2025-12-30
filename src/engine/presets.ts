@@ -20,6 +20,12 @@ interface Preset {
 const welcomePreset: Preset = {
   nodes: [
     {
+      id: 'osc-1',
+      type: 'oscillator',
+      position: { x: 50, y: 200 },
+      data: { muted: false },
+    },
+    {
       id: 'output-1',
       type: 'output',
       position: { x: 400, y: 200 },
@@ -128,7 +134,7 @@ const sequencerPreset: Preset = {
     {
       id: 'metro-1',
       type: 'metro',
-      position: { x: 100, y: 50 },
+      position: { x: -150, y: 50 },
       data: { bpm: 120 },
     },
     {
@@ -151,7 +157,7 @@ const sequencerPreset: Preset = {
     {
       id: 'osc-1',
       type: 'oscillator',
-      position: { x: 400, y: 250 },
+      position: { x: 400, y: 350 },
       data: { frequency: 440, gain: 1, waveform: 'sawtooth' },
     },
     {
@@ -159,12 +165,6 @@ const sequencerPreset: Preset = {
       type: 'envelope',
       position: { x: 400, y: 50 },
       data: { gate: 0, attack: 0.01, decay: 0.15, sustain: 0.2, release: 0.3 },
-    },
-    {
-      id: 'gain-1',
-      type: 'gain',
-      position: { x: 400, y: 500 },
-      data: { input: 0, gain: 0.4 },
     },
     {
       id: 'output-1',
@@ -206,63 +206,16 @@ const sequencerPreset: Preset = {
       id: 'e5',
       source: 'osc-1',
       sourceHandle: 'signal',
-      target: 'gain-1',
-      targetHandle: 'input',
+      target: 'output-1',
+      targetHandle: 'left',
     },
     {
       id: 'e6',
       source: 'env-1',
       sourceHandle: 'signal',
-      target: 'gain-1',
-      targetHandle: 'gain',
-    },
-    {
-      id: 'e7',
-      source: 'gain-1',
-      sourceHandle: 'signal',
-      target: 'output-1',
-      targetHandle: 'left',
-    },
-  ],
-}
-
-// Advanced - Simple LFO modulation test
-const advancedPreset: Preset = {
-  nodes: [
-    {
-      id: 'lfo-1',
-      type: 'lfo',
-      position: { x: 100, y: 50 },
-      data: { frequency: 5, gain: 50, waveform: 'sine' },
-    },
-    {
-      id: 'osc-1',
-      type: 'oscillator',
-      position: { x: 100, y: 250 },
-      data: { frequency: 440, gain: 0.3, waveform: 'sine' },
-    },
-    {
-      id: 'output-1',
-      type: 'output',
-      position: { x: 450, y: 250 },
-      data: { muted: false },
-    },
-  ],
-  edges: [
-    {
-      id: 'e1',
-      source: 'lfo-1',
-      sourceHandle: 'signal',
       target: 'osc-1',
-      targetHandle: 'frequency',
-    },
-    {
-      id: 'e2',
-      source: 'osc-1',
-      sourceHandle: 'signal',
-      target: 'output-1',
-      targetHandle: 'left',
-    },
+      targetHandle: 'gain',
+    }
   ],
 }
 
@@ -274,7 +227,6 @@ export const PRESETS: Record<TabId, Preset> = {
   'getting-started': gettingStartedPreset,
   'basic-synthesis': basicSynthesisPreset,
   'sequencer': sequencerPreset,
-  'advanced': advancedPreset,
   'presets': presetsPreset,
 }
 
