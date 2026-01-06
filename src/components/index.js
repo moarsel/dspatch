@@ -17,4 +17,4 @@ export { NodeCard, NodeContent } from './Node';
 export { InletHandle } from './InletHandle';
 
 // Sidebar components
-export { Sidebar, SidebarHeader, NodePalette } from './Sidebar';
+export { Sidebar, SidebarHeader } from './Sidebar';

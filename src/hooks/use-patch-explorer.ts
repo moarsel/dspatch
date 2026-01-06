@@ -5,14 +5,16 @@ export type TabId =
   | 'getting-started'
   | 'basic-synthesis'
   | 'sequencer'
-  | 'presets'
+  | 'fm-synth'
+  | 'karplus-strong'
 
 export const TAB_TITLES: Record<TabId, string> = {
   'welcome': 'Welcome to dspatch',
   'getting-started': 'Getting Started',
   'basic-synthesis': 'Basic Synthesizer',
   'sequencer': 'Sequencer & Sampling',
-  'presets': 'Preset Instruments',
+  'fm-synth': 'FM Synthesis',
+  'karplus-strong': 'Strings',
 }
 
 export const TABS: { id: TabId; label: string }[] = [
@@ -20,7 +22,8 @@ export const TABS: { id: TabId; label: string }[] = [
   { id: 'getting-started', label: 'Getting Started' },
   { id: 'basic-synthesis', label: 'Basic Synth' },
   { id: 'sequencer', label: 'Sequencer' },
-  { id: 'presets', label: 'Presets' },
+  { id: 'fm-synth', label: 'FM Synth' },
+  { id: 'karplus-strong', label: 'Strings' },
 ]
 
 interface PatchExplorerState {

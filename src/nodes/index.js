@@ -19,6 +19,7 @@ import { FFTNode, descriptor as fftDescriptor } from './FFT';
 import { ProbeNode, descriptor as probeDescriptor } from './Probe';
 import { MetroNode, descriptor as metroDescriptor } from './Metro';
 import { SequencerNode, descriptor as sequencerDescriptor } from './Sequencer';
+import { KeyboardNode, descriptor as keyboardDescriptor } from './Keyboard';
 
 // Registry: type -> { descriptor, Component }
 export const registry = {
@@ -101,6 +102,10 @@ export const registry = {
   sequencer: {
     descriptor: sequencerDescriptor,
     Component: SequencerNode,
+  },
+  keyboard: {
+    descriptor: keyboardDescriptor,
+    Component: KeyboardNode,
   },
 };
 

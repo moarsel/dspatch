@@ -14,7 +14,7 @@ import { useIsMobile } from "@/hooks/use-mobile"
 
 // Node categories with their types
 const categories = {
-  'I/O': ['output'],
+  'I/O': ['output', 'keyboard'],
   'Sources': ['oscillator', 'noise'],
   'Processing': ['gain', 'filter', 'delay', 'mix'],
   'Modulation': ['lfo', 'envelope'],

@@ -219,15 +219,246 @@ const sequencerPreset: Preset = {
   ],
 }
 
-// Presets tab - same as welcome for now
-const presetsPreset: Preset = welcomePreset
+// FM Synth Preset
+const fmSynthPreset: Preset = {
+  nodes: [
+    {
+      id: 'num-base',
+      type: 'number',
+      position: { x: 50, y: 50 },
+      data: { value: 220 },
+    },
+    {
+      id: 'osc-mod',
+      type: 'oscillator',
+      position: { x: 50, y: 200 },
+      data: { frequency: 110, gain: 100, waveform: 'sine' },
+    },
+    {
+      id: 'math-add',
+      type: 'math',
+      position: { x: 350, y: 100 },
+      data: { operation: 'add', a: 0, b: 0 },
+    },
+    {
+      id: 'osc-carrier',
+      type: 'oscillator',
+      position: { x: 650, y: 200 },
+      data: { frequency: 440, gain: 0, waveform: 'sine' },
+    },
+    {
+      id: 'bang-1',
+      type: 'bang',
+      position: { x: 350, y: 400 },
+      data: { gate: 0 },
+    },
+    {
+      id: 'env-1',
+      type: 'envelope',
+      position: { x: 650, y: 50 },
+      data: { gate: 0, attack: 0.01, decay: 0.2, sustain: 0.8, release: 0.5 },
+    },
+    {
+      id: 'output-1',
+      type: 'output',
+      position: { x: 950, y: 250 },
+      data: { muted: false },
+    },
+  ],
+  edges: [
+    // Base Freq -> Math (Add) input A
+    {
+      id: 'e-base',
+      source: 'num-base',
+      sourceHandle: 'signal',
+      target: 'math-add',
+      targetHandle: 'a',
+    },
+    // Modulator -> Math (Add) input B
+    {
+      id: 'e-mod',
+      source: 'osc-mod',
+      sourceHandle: 'signal',
+      target: 'math-add',
+      targetHandle: 'b',
+    },
+    // Math (Add) -> Carrier Frequency
+    {
+      id: 'e-freq',
+      source: 'math-add',
+      sourceHandle: 'signal',
+      target: 'osc-carrier',
+      targetHandle: 'frequency',
+    },
+    // Bang -> Envelope Gate
+    {
+      id: 'e-gate',
+      source: 'bang-1',
+      sourceHandle: 'signal',
+      target: 'env-1',
+      targetHandle: 'gate',
+    },
+    // Envelope -> Carrier Gain
+    {
+      id: 'e-amp',
+      source: 'env-1',
+      sourceHandle: 'signal',
+      target: 'osc-carrier',
+      targetHandle: 'gain',
+    },
+    // Carrier -> Output
+    {
+      id: 'e-out',
+      source: 'osc-carrier',
+      sourceHandle: 'signal',
+      target: 'output-1',
+      targetHandle: 'left',
+    },
+  ],
+}
+
+// Karplus-Strong Preset
+const karplusStrongPreset: Preset = {
+  nodes: [
+    {
+      id: 'key-1',
+      type: 'keyboard',
+      position: { x: 50, y: 50 },
+      data: { currentNote: 48, currentGate: 0, octaveOffset: -1 },
+    },
+    {
+      id: 'ntf-1',
+      type: 'notetofreq',
+      position: { x: 300, y: 50 },
+      data: { note: 48 },
+    },
+    {
+      id: 'math-1',
+      type: 'math',
+      position: { x: 600, y: 50 },
+      data: { operation: 'divide', a: 1000, b: 0 },
+    },
+    {
+      id: 'env-1',
+      type: 'envelope',
+      position: { x: 900, y: 50 },
+      data: { gate: 0, attack: 0.002, decay: 3, sustain: 0.0, release: 0.9 },
+    },
+    {
+      id: 'noise-1',
+      type: 'noise',
+      position: { x: 50, y: 350 },
+      data: { gain: 0.9, noiseType: 'white' },
+    },
+    {
+      id: 'delay-1',
+      type: 'delay',
+      position: { x: 400, y: 350 },
+      data: { feedback: 0.98, mix: 1, time: 20 },
+    },
+    {
+      id: 'filt-1',
+      type: 'filter',
+      position: { x: 800, y: 350 },
+      data: { q: 1, filterType: 'lowpass', cutoff: 1600 },
+    },
+    {
+      id: 'vca-1',
+      type: 'gain',
+      position: { x: 1200, y: 350 },
+      data: { gain: 1 },
+    },
+    {
+      id: 'output-1',
+      type: 'output',
+      position: { x: 1550, y: 350 },
+      data: { muted: false },
+    },
+  ],
+  edges: [
+    // Keyboard -> NoteToFreq
+    {
+      id: 'e-note',
+      source: 'key-1',
+      sourceHandle: 'note',
+      target: 'ntf-1',
+      targetHandle: 'note',
+    },
+    // Keyboard -> Envelope Gate
+    {
+      id: 'e-gate',
+      source: 'key-1',
+      sourceHandle: 'gate',
+      target: 'env-1',
+      targetHandle: 'gate',
+    },
+    // NoteToFreq -> Math (Input B)
+    {
+      id: 'e-freq-math',
+      source: 'ntf-1',
+      sourceHandle: 'frequency',
+      target: 'math-1',
+      targetHandle: 'b',
+    },
+    // Math -> Delay Time
+    {
+      id: 'e-time',
+      source: 'math-1',
+      sourceHandle: 'signal',
+      target: 'delay-1',
+      targetHandle: 'time',
+    },
+    // Noise -> Delay Input
+    {
+      id: 'e-noise-del',
+      source: 'noise-1',
+      sourceHandle: 'signal',
+      target: 'delay-1',
+      targetHandle: 'input',
+    },
+    // Delay -> Filter Input
+    {
+      id: 'e-del-filt',
+      source: 'delay-1',
+      sourceHandle: 'signal',
+      target: 'filt-1',
+      targetHandle: 'input',
+    },
+    // Filter -> VCA Input
+    {
+      id: 'e-filt-vca',
+      source: 'filt-1',
+      sourceHandle: 'signal',
+      target: 'vca-1',
+      targetHandle: 'input',
+    },
+    // Envelope -> VCA Gain
+    {
+      id: 'e-env-vca',
+      source: 'env-1',
+      sourceHandle: 'signal',
+      target: 'vca-1',
+      targetHandle: 'gain',
+    },
+    // VCA -> Output
+    {
+      id: 'e-vca-out',
+      source: 'vca-1',
+      sourceHandle: 'signal',
+      target: 'output-1',
+      targetHandle: 'left',
+    },
+  ],
+}
+
 
 export const PRESETS: Record<TabId, Preset> = {
   'welcome': welcomePreset,
   'getting-started': gettingStartedPreset,
   'basic-synthesis': basicSynthesisPreset,
   'sequencer': sequencerPreset,
-  'presets': presetsPreset,
+  'fm-synth': fmSynthPreset,
+  'karplus-strong': karplusStrongPreset,
 }
 
 export function getPreset(tabId: TabId): Preset {
