@@ -1,4 +1,4 @@
-# ∿ Dspatch
+# ∿ dspatch
 
 Visual programming environment for audio synthesis.
 
