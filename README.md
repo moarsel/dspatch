@@ -1,6 +1,6 @@
 # Dspatch
 
-Visual programming environment for audio synthesis inspired.
+Visual programming environment for audio synthesis.
 
 Build audio patches by connecting nodes on a canvas. Drag oscillators, filters, envelopes, and effects together to create sounds in real-time. Inspired by the work of Miller Puckette, creator of Max/MSP and Pure Data.
 
