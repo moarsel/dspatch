@@ -11,7 +11,7 @@ export const descriptor = {
     gain: { default: 0.5 },
   },
   outlets: ['signal'],
-  compile: (inputs, nodeId) => {
+  compile: (inputs, _nodeId) => {
     const freq = inputs.frequency;
     const gain = inputs.gain;
     const waveform = inputs.waveform ?? 'sine';

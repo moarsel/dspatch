@@ -24,12 +24,8 @@ export const descriptor = {
       return { signal: el.const({ key: `${nodeId}:silence`, value: 0 }) };
     }
 
-    // Convert ms to samples (assuming 44100 sample rate)
-    // el.ms2samps would be ideal but we'll use a simple calculation
+    // Max delay of 2 seconds (assuming 44100 sample rate)
     const sampleRate = 44100;
-    const delaySamples = (timeMs / 1000) * sampleRate;
-
-    // Max delay of 2 seconds
     const maxDelaySamples = 2 * sampleRate;
 
     // Simple delay with feedback using sdelay (single sample delay line)

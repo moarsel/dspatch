@@ -37,7 +37,7 @@ export const descriptor = {
 };
 
 export function FFTNode({ id, selected }) {
-  const { data } = useNodeData(id);
+  useNodeData(id);
   const [magnitudes, setMagnitudes] = useState([]);
   const rafRef = useRef(null);
   const dataRef = useRef([]);

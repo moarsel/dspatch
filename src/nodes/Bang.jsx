@@ -11,7 +11,7 @@ export const descriptor = {
     gate: { default: 0 },
   },
   outlets: ['signal'],
-  compile: (inputs, nodeId) => {
+  compile: (inputs, _nodeId) => {
     let gate;
 
     if (typeof inputs.gate === 'object') {

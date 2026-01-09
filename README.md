@@ -1,34 +1,101 @@
 # Dspatch
 
-Visual programming for audio synthesis.
+Visual programming environment for audio synthesis inspired.
 
+Build audio patches by connecting nodes on a canvas. Drag oscillators, filters, envelopes, and effects together to create sounds in real-time. Inspired by the work of Miller Puckette, creator of Max/MSP and Pure Data.
 
-## UI
+React + Elementary Audio = Easy UI development + Powerful audio processing.
 
-- more excellent ui, subtle intetgration of some bold skeumorphism in key areas that create joy and resonance. e.g. output should have a speaker grill, scope should looke like an oscilloscope. inspired by jhey: https://codepen.io/jh3y/pen/WbQNxXb https://codepen.io/jh3y/pens/popular
-- edge displays active/inactive signal chain. subtle number animations. nice feeling toggles
-
-- copy / paste
-- undo / redo
-- help tooltips?
 
 ## Features
-- load/save patches
 
-- sub patches w custom uis
-    - like you should be able to play around then set your ins/out and wrap your thing with a custom ui so that its totally composable.
-    - sandbox/playground style editor? https://www.elementary.audio/docs/playground_api 
-    - programatic ui builder from descriptor?
-    - save as compressed url a la https://nyman.re/mapdraw/#l=60.172108%2C24.941458&z=16 and https://textarea.my/
-    - i want to be able to make something like: https://teetow.com/elementary_grid/
+- **Node-based patching** - Connect audio sources, processors, and outputs visually
+- **Real-time audio** - Hear changes instantly as you modify your patch
+- **Built-in visualizations** - Oscilloscope, spectrum analyzer, and level meters
+- **Sequencer** - Step sequencer with drag-to-edit interface
+- **Keyboard input** - Play notes with your computer keyboard
+- **Preset library** - Example patches to learn from and build on
 
-- editable programatic text view of signal flow (like that other cool app i saw)
+## Quick Start
 
-- vst export
+```bash
+npm install
+npm run dev
+```
 
+Open http://localhost:5173
 
-## Patches
-- looper
-- pitch shift
-- record clip
-- sampler
+## How It Works
+
+Drag nodes from the sidebar onto the canvas, then connect outlets to inlets. Each inlet accepts one connection; outlets can connect to multiple destinations.
+
+### Architecture
+
+Each node type is a single file with two exports:
+
+```jsx
+// 1. Descriptor - defines the parameters and audio signal behavior
+export const descriptor = {
+  type: 'oscillator',
+  inlets: { frequency: { default: 440 }, gain: { default: 0.5 } },
+  outlets: ['signal'],
+  compile: (inputs, nodeId) => {
+    // Elementary Audio functions build the audio graph
+    return { signal: el.mul(el.cycle(inputs.frequency), inputs.gain) };
+  }
+};
+
+// 2. React component - renders the UI
+export function OscillatorNode({ id, selected }) {
+  const { data, updateParam } = useNodeData(id);
+  return (
+    <NodeCard type="oscillator" selected={selected}>
+      {/* Parameter controls, handles, etc. */}
+    </NodeCard>
+  );
+}
+```
+
+**The compilation flow:**
+
+1. User edits the graph (adds node, connects edge, changes parameter)
+2. Zustand store updates trigger `compileGraph()`
+3. Nodes are topologically sorted so dependencies compile first
+4. Each node's `descriptor.compile()` is called with its resolved inputs
+5. The resulting Elementary Audio graph is rendered to WebAudio
+
+**Elementary Audio basics:**
+
+Elementary uses a functional approach where you compose audio operations:
+
+```js
+el.cycle(440)                    // Sine oscillator at 440Hz
+el.mul(signal, 0.5)              // Multiply signal by 0.5
+el.add(el.cycle(440), el.noise()) // Mix sine and noise
+```
+
+Functions return node objects that describe the audio graph. The graph is rendered to actual audio samples by the WebRenderer.
+
+## Development
+
+```bash
+npm run dev        # Start dev server
+npm run build      # Production build
+npm run lint       # Run ESLint
+npm test           # Run tests in watch mode
+npm run test:run   # Run tests once
+```
+
+See [CLAUDE.md](./CLAUDE.md) for architecture details and contribution guidelines.
+
+## Tech Stack
+
+- [React Flow](https://reactflow.dev/) - Node editor
+- [Elementary Audio](https://www.elementary.audio/) - DSP engine
+- [Zustand](https://zustand-demo.pmnd.rs/) - State management
+- [Vite](https://vite.dev/) - Build tool
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
+
+## License
+
+[MIT](./LICENSE)

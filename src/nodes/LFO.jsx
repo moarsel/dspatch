@@ -12,7 +12,7 @@ export const descriptor = {
     depth: { default: 1 },
   },
   outlets: ['signal'],
-  compile: (inputs, nodeId) => {
+  compile: (inputs, _nodeId) => {
     const rate = inputs.rate;
     const depth = inputs.depth;
     const waveform = inputs.waveform ?? 'sine';

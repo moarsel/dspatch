@@ -36,7 +36,7 @@ export const descriptor = {
 };
 
 export function ScopeNode({ id, selected }) {
-  const { data } = useNodeData(id);
+  useNodeData(id);
   const [waveform, setWaveform] = useState([]);
   const [minMax, setMinMax] = useState({ min: 0, max: 0 });
   const rafRef = useRef(null);

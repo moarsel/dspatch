@@ -1,4 +1,29 @@
-.vercel
-.playwright-mcp
+# Dependencies
 node_modules
+
+# Build output
 dist
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+
+# Test coverage
+coverage/
+
+# Deployment
+.vercel
+
+# Tool caches
+.playwright-mcp
+.claude/

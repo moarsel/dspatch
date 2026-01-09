@@ -1,7 +1,21 @@
 {
-  "name": "elema-poc",
-  "private": true,
-  "version": "0.0.0",
+  "name": "dspatch",
+  "version": "0.1.0",
+  "description": "Visual programming environment for audio synthesis",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/moarsel/dspatch"
+  },
+  "homepage": "https://github.com/moarsel/dspatch",
+  "keywords": [
+    "audio",
+    "synthesis",
+    "visual-programming",
+    "web-audio",
+    "dsp",
+    "elementary-audio"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",

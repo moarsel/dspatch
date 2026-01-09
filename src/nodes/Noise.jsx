@@ -2,7 +2,6 @@
 import { el } from '@elemaudio/core';
 import { Handle, Position } from '@xyflow/react';
 import { useNodeData } from '../engine/useGraph';
-import { formatFixed } from '../engine/format';
 import { NodeCard, NodeContent, ParamRow, RangeInput, SelectInput, ValueDisplay, InletHandle } from '../components';
 
 export const descriptor = {
@@ -11,7 +10,7 @@ export const descriptor = {
     gain: { default: 0.5 },
   },
   outlets: ['signal'],
-  compile: (inputs, nodeId) => {
+  compile: (inputs, _nodeId) => {
     const gain = inputs.gain;
     const noiseType = inputs.noiseType ?? 'white';
 

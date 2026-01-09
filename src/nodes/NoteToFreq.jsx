@@ -13,23 +13,6 @@ function midiToFreq(note) {
   return 440 * Math.pow(2, (note - 69) / 12);
 }
 
-// Parse note name to MIDI number (e.g., "C4" -> 60, "A4" -> 69)
-function noteNameToMidi(noteName) {
-  const match = noteName.match(/^([A-G]#?)(-?\d+)$/);
-  if (!match) return 60; // Default to C4
-  const [, note, octave] = match;
-  const noteIndex = NOTE_NAMES.indexOf(note);
-  if (noteIndex === -1) return 60;
-  return (parseInt(octave) + 1) * 12 + noteIndex;
-}
-
-// Convert MIDI number to note name
-function midiToNoteName(midi) {
-  const octave = Math.floor(midi / 12) - 1;
-  const noteIndex = midi % 12;
-  return `${NOTE_NAMES[noteIndex]}${octave}`;
-}
-
 export const descriptor = {
   type: 'notetofreq',
   inlets: {

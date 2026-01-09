@@ -23,8 +23,9 @@ export default defineConfig([
       },
     },
     rules: {
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
-     'react-refresh/only-export-components': ['error', { varsIgnorePattern: '^[A-Z_]' }]
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]', argsIgnorePattern: '^_' }],
+      // Node files export both descriptor objects and components by design
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true, allowExportNames: ['descriptor'] }]
     },
   },
 ])

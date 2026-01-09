@@ -3,7 +3,7 @@ import { el } from '@elemaudio/core';
 import { Handle, Position } from '@xyflow/react';
 import { useNodeData } from '../engine/useGraph';
 import { subscribe, unsubscribe } from '../engine/audioContext';
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { NodeCard, NodeContent, ParamRow, InletHandle } from '../components';
 
 const NUM_STEPS = 8;
@@ -72,11 +72,14 @@ export function SequencerNode({ id, selected }) {
   const [dragging, setDragging] = useState(null); // { index, startY, startValue }
   const containerRef = useRef(null);
 
-  // Get step values
-  const steps = [];
-  for (let i = 0; i < NUM_STEPS; i++) {
-    steps.push(data[`step${i}`] ?? DEFAULT_STEPS[i]);
-  }
+  // Get step values - memoized to avoid recreating on every render
+  const steps = useMemo(() => {
+    const result = [];
+    for (let i = 0; i < NUM_STEPS; i++) {
+      result.push(data[`step${i}`] ?? DEFAULT_STEPS[i]);
+    }
+    return result;
+  }, [data]);
 
   useEffect(() => {
     // Subscribe to position meter

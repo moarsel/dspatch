@@ -36,7 +36,7 @@ function midiToNoteName(midi) {
 }
 
 // Mini keyboard component
-function MiniKeyboard({ pressedKeys, octaveOffset }) {
+function MiniKeyboard({ pressedKeys }) {
   const whiteKeys = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k'];
   const blackKeys = [
     { key: 'w', left: 10 },   // C#
@@ -50,7 +50,7 @@ function MiniKeyboard({ pressedKeys, octaveOffset }) {
   return (
     <div className="relative h-10 flex mt-2 nodrag">
       {/* White keys */}
-      {whiteKeys.map((key, i) => (
+      {whiteKeys.map((key) => (
         <div
           key={key}
           className={`w-4 h-10 border border-gray-600 rounded-b transition-colors ${
@@ -59,7 +59,7 @@ function MiniKeyboard({ pressedKeys, octaveOffset }) {
         />
       ))}
       {/* Black keys */}
-      {blackKeys.map(({ key, left }, i) =>
+      {blackKeys.map(({ key, left }) =>
         key && (
           <div
             key={key}
@@ -91,7 +91,6 @@ export const descriptor = {
 
 export function KeyboardNode({ id, selected }) {
   const { data, updateParam } = useNodeData(id);
-  const [enabled, setEnabled] = useState(true);
   const [pressedKeys, setPressedKeys] = useState(new Set());
 
   const octaveOffset = data.octaveOffset ?? 0;
@@ -203,7 +202,7 @@ export function KeyboardNode({ id, selected }) {
         </ParamRow>
 
         {/* Mini keyboard */}
-        <MiniKeyboard pressedKeys={pressedKeys} octaveOffset={octaveOffset} />
+        <MiniKeyboard pressedKeys={pressedKeys} />
       </NodeContent>
 
       {/* Outlets */}
